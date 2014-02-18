@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour {
 		this.jumpForce = currentPlayer.jumpForce;
 		this.moveSpeed = currentPlayer.moveSpeed;
 		this.gameObject.renderer.material = currentPlayer.playerMaterial;
-		Debug.Log ("Current player: " + currentPlayer.playerName);
 		
 	}
 	
