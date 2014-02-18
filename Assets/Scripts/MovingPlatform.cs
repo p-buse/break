@@ -17,10 +17,10 @@ public class MovingPlatform : MonoBehaviour {
 
 	void Awake()
 	{
-		leftLimit = leftLimit;
-		rightLimit = rightLimit;
-		upLimit = upLimit;
-		downLimit = downLimit;
+		leftLimit = leftOrUpperLimit.position.x;
+		rightLimit = rightOrLowerLimit.position.x;
+		upLimit = leftOrUpperLimit.position.y;
+		downLimit = rightOrLowerLimit.position.y;
 	}
 
 
@@ -36,7 +36,9 @@ public class MovingPlatform : MonoBehaviour {
 			if (transform.position.x <= leftLimit)
 				currentDirection = 1;
 
-			rigidbody2D.velocity = new Vector2(moveSpeed * currentDirection,0f);
+//			rigidbody2D.transform.position. = new Vector2(moveSpeed * currentDirection,0f);
+//			rigidbody2D.transform.position.x += moveSpeed * currentDirection;
+			transform.Translate (new Vector3(moveSpeed * currentDirection,0f,0f));
 		}
 		if (direction == Direction.Vertical)
 		{
@@ -47,7 +49,9 @@ public class MovingPlatform : MonoBehaviour {
 			if (transform.position.y <= downLimit)
 				currentDirection = 1;
 
-			rigidbody2D.velocity = new Vector2(0f,moveSpeed * currentDirection);
+//			rigidbody2D.velocity = new Vector2(0f,moveSpeed * currentDirection);
+//			rigidbody2D.transform.position.y += moveSpeed * currentDirection;
+			transform.Translate (new Vector3(0f,moveSpeed * currentDirection, 0f));
 		}
 	}
 }
