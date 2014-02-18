@@ -12,7 +12,7 @@ public class RotateCamera : MonoBehaviour {
 
 	void Update ()
 	{
-		transform.Rotate (Mathf.Abs (playerBody.velocity.normalized.y * rotateVertical),0f,Mathf.Abs (playerBody.velocity.normalized.x * rotateHorizontal));
+		transform.Rotate (playerBody.velocity.normalized.y * rotateVertical,0f,playerBody.velocity.normalized.x * rotateHorizontal);
 		transform.rotation = Quaternion.Lerp (Quaternion.identity,transform.rotation,resetTime);
 	}
 }
