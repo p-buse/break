@@ -6,7 +6,7 @@ public class MoveCameraToPlayer : MonoBehaviour {
 	public float zoomSpeed; //How fast the camera should zoom in and out on the player
 	public float trackXSpeed = 1; //Should we track the horizontal
 	public float trackYSpeed = 1; //Should we track the vertical
-
+	
 	public GameObject player;
 	
 	void Update () {
