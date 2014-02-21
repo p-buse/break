@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour {
 			this.grounded = false;
 		}
 		
-		if (Input.GetButton("Fire1") && Time.time > nextSwitchTime)
+		if (Input.GetButton("SwitchPlayer") && Time.time > nextSwitchTime)
 		{
 			nextSwitchTime = Time.time + this.switchCooldown;
 			SwitchPlayer ();

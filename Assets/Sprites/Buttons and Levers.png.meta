@@ -96,7 +96,7 @@ TextureImporter:
         x: 1652
         y: 147
         width: 475
-        height: 118
+        height: 154
       alignment: 0
       pivot: {x: .5, y: .5}
     - name: button0
