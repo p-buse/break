@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour {
 	
 	private bool grounded; // Check for whether we're on the ground
 	private bool jump; // Are we jumping?
+
+	private Hashtable mechanicalThingsYouAreTouching; // Mechanical things you are touching
 	
 	
 	
@@ -53,6 +55,21 @@ public class PlayerController : MonoBehaviour {
 		this.moveSpeed = currentPlayer.moveSpeed;
 		this.gameObject.renderer.material = currentPlayer.playerMaterial;
 		
+	}
+
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		if (collision.gameObject.tag == "Mechanical")
+		{
+			// Check whether this contains an activator component
+			IActivator activator = (IActivator) collision.gameObject.GetComponent(typeof(IActivator));
+			if (activator != null)
+			{
+				// And add it to the list of things you are touching
+				mechanicalThingsYouAreTouching.Add(collision.gameObject,activator);
+			}
+
+		}
 	}
 	
 	
