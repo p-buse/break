@@ -4,6 +4,7 @@ using System.Collections;
 public class LeverController : MonoBehaviour,IActivator
 {
 	public Animator animationController;
+	
 
 	/// <summary>
 	/// Toggles the lever

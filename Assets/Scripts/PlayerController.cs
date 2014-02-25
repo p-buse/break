@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour {
 	private bool grounded; // Check for whether we're on the ground
 	private bool jump; // Are we jumping?
 
-	private Hashtable mechanicalThingsYouAreTouching; // Mechanical things you are touching
+	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
 	
 	
 	
@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour {
 		groundCheckLeft = transform.Find("Ground Check Left");
 		groundCheckRight = transform.Find("Ground Check Right");
 		SwitchPlayer();
+		activatorsList = new Hashtable();
 		
 	}
 	
@@ -57,18 +58,33 @@ public class PlayerController : MonoBehaviour {
 		
 	}
 
-	void OnCollisionEnter2D(Collision2D collision)
+	void OnTriggerEnter2D(Collider2D collider)
 	{
-		if (collision.gameObject.tag == "Mechanical")
+		if (collider.gameObject.tag.Equals ( "Mechanical"))
 		{
 			// Check whether this contains an activator component
-			IActivator activator = (IActivator) collision.gameObject.GetComponent(typeof(IActivator));
+			IActivator activator = (IActivator) collider.gameObject.GetComponent(typeof(IActivator));
 			if (activator != null)
 			{
-				// And add it to the list of things you are touching
-				mechanicalThingsYouAreTouching.Add(collision.gameObject,activator);
+				int activatorID = collider.gameObject.GetInstanceID();
+				// If it isn't in the table
+				if (!activatorsList.ContainsKey(activatorID))
+				{
+					// Add it to the table
+					activatorsList.Add(activatorID,activator);
+				}
+
 			}
 
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D collider)
+	{
+		int activatorID = collider.gameObject.GetInstanceID();
+		if (activatorsList.ContainsKey (activatorID))
+		{
+			activatorsList.Remove(activatorID);
 		}
 	}
 	
@@ -79,7 +95,7 @@ public class PlayerController : MonoBehaviour {
 		this.grounded = Physics2D.Linecast (transform.position, groundCheckLeft.position, 1 << LayerMask.NameToLayer ("Ground"))
 			|| Physics2D.Linecast (transform.position, groundCheckRight.position, 1 << LayerMask.NameToLayer("Ground"));
 		
-		if (Input.GetButton ("Jump") && this.grounded)
+		if (Input.GetButtonDown ("Jump") && this.grounded)
 		{
 			this.jump = true; // We jump!
 			this.grounded = false;
@@ -89,6 +105,15 @@ public class PlayerController : MonoBehaviour {
 		{
 			nextSwitchTime = Time.time + this.switchCooldown;
 			SwitchPlayer ();
+		}
+
+		if (Input.GetButtonDown ("Action"))
+		{
+			// Activate anything we're currently touching
+			foreach (IActivator activator in activatorsList.Values)
+			{
+				activator.Activate();
+			}
 		}
 		
 		
