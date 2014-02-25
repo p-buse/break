@@ -15,4 +15,5 @@ public class LeverController : MonoBehaviour,IActivator
 		leverIsLeft = !leverIsLeft;
 		animationController.SetBool("isLeft",leverIsLeft);
 	}
+
 }
