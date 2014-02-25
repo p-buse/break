@@ -19,8 +19,11 @@ public class PlayerController : MonoBehaviour {
 	
 	private bool grounded; // Check for whether we're on the ground
 	private bool jump; // Are we jumping?
+	private bool onMover; // Are we riding something?
+	private IMover mover;
 
 	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
+
 	
 	
 	
@@ -115,9 +118,15 @@ public class PlayerController : MonoBehaviour {
 				activator.Activate();
 			}
 		}
-		
-		
-		
+	}
+
+	void OnColliderEnter2D(Collision2D collision)
+	{
+		if (collision.gameObject.tag == "Moving")
+		{
+			this.onMover = true;
+			mover = (IMover) collision.gameObject.GetComponent(typeof(IMover));
+		}
 	}
 	
 	void FixedUpdate()
@@ -131,6 +140,11 @@ public class PlayerController : MonoBehaviour {
 		{
 			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
 			this.jump = false;
+		}
+
+		if (this.onMover)
+		{
+			transform.Translate (mover.Movement ());
 		}
 	}
 }
