@@ -117,29 +117,29 @@ public class PlayerController : MonoBehaviour {
 
 	
 
-//	void OnCollisionEnter2D(Collision2D collision)
-//	{
-//		Debug.Log ("COLLIDED!");
-//		if (collision.gameObject.tag == "Moving" && this.grounded)
-//		{
-//			this.onMover = true;
-//			mover = (IMover) collision.gameObject.GetComponent(typeof(IMover));
-//			moverID = collision.gameObject.GetInstanceID();
-//			Debug.Log ("current mover: " + moverID);
-//		}
-//	}
-//
-//	void OnCollisionExit2D(Collision2D collision)
-//	{
-//		Debug.Log ("exiting ID " + collision.gameObject.GetInstanceID());
-//		if (collision.gameObject.tag == "Moving" && collision.gameObject.GetInstanceID() == this.moverID)
-//		{
-//			Debug.Log ("no longer moving");
-//			this.onMover = false;
-//			mover = null;
-//			moverID = -1;
-//		}
-//	}
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		Debug.Log ("COLLIDED!");
+		if (collision.gameObject.tag == "Moving" && this.grounded)
+		{
+			this.onMover = true;
+			mover = (IMover) collision.gameObject.GetComponent(typeof(IMover));
+			moverID = collision.gameObject.GetInstanceID();
+			Debug.Log ("current mover: " + moverID);
+		}
+	}
+
+	void OnCollisionExit2D(Collision2D collision)
+	{
+		Debug.Log ("exiting ID " + collision.gameObject.GetInstanceID());
+		if (collision.gameObject.tag == "Moving" && collision.gameObject.GetInstanceID() == this.moverID)
+		{
+			Debug.Log ("no longer moving");
+			this.onMover = false;
+			mover = null;
+			moverID = -1;
+		}
+	}
 
 	
 	void FixedUpdate()
