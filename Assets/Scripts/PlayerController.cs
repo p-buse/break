@@ -14,13 +14,15 @@ public class PlayerController : MonoBehaviour {
 	public float switchCooldown = .25f; // Cooldown between switches
 	private float nextSwitchTime = 0f; // Time at which we can switch characters next
 	
-	private Transform groundCheckLeft; // A position to check if we're grounded on the left
-	private Transform groundCheckRight; // A position to check if we're grounded on the right
+	private Transform groundCheck; // A position to check if we're grounded
 	
 	private bool grounded; // Check for whether we're on the ground
 	private bool jump; // Are we jumping?
+
+	// Riding a mover
 	private bool onMover; // Are we riding something?
-	private IMover mover;
+	private IMover mover; // The Mover script of the mover we're riding
+	private int moverID = -1; // ID of the current Mover we're riding
 
 	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
 
@@ -33,8 +35,7 @@ public class PlayerController : MonoBehaviour {
 	
 	void Awake()
 	{
-		groundCheckLeft = transform.Find("Ground Check Left");
-		groundCheckRight = transform.Find("Ground Check Right");
+		groundCheck = transform.Find("Ground Check");
 		SwitchPlayer();
 		activatorsList = new Hashtable();
 		
@@ -95,9 +96,8 @@ public class PlayerController : MonoBehaviour {
 	void Update ()
 	{
 		// Check if we are grounded on the left OR on the right
-		this.grounded = Physics2D.Linecast (transform.position, groundCheckLeft.position, 1 << LayerMask.NameToLayer ("Ground"))
-			|| Physics2D.Linecast (transform.position, groundCheckRight.position, 1 << LayerMask.NameToLayer("Ground"));
-		
+		this.grounded = Physics2D.Linecast (transform.position, groundCheck.position, 1 << LayerMask.NameToLayer ("Ground"));
+
 		if (Input.GetButtonDown ("Jump") && this.grounded)
 		{
 			this.jump = true; // We jump!
@@ -120,14 +120,30 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void OnColliderEnter2D(Collision2D collision)
+	void OnCollisionEnter2D(Collision2D collision)
 	{
-		if (collision.gameObject.tag == "Moving")
+		Debug.Log ("COLLIDED!");
+		if (collision.gameObject.tag == "Moving" && this.grounded)
 		{
 			this.onMover = true;
 			mover = (IMover) collision.gameObject.GetComponent(typeof(IMover));
+			moverID = collision.gameObject.GetInstanceID();
+			Debug.Log ("current mover: " + moverID);
 		}
 	}
+
+	void OnCollisionExit2D(Collision2D collision)
+	{
+		Debug.Log ("exiting ID " + collision.gameObject.GetInstanceID());
+		if (collision.gameObject.tag == "Moving" && collision.gameObject.GetInstanceID() == this.moverID)
+		{
+			Debug.Log ("no longer moving");
+			this.onMover = false;
+			mover = null;
+			moverID = -1;
+		}
+	}
+
 	
 	void FixedUpdate()
 	{

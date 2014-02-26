@@ -55,7 +55,7 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover {
 				
 				return new Vector3 (0f, moveSpeed * currentDirection, 0f);
 			}
-			Debug.LogError("Error: " + this.gameObject + " moving platform has no direction!");
+			Debug.LogError("Error: " + this.gameObject + " moving platform has no direction set!");
 			return Vector3.zero;
 		}
 		else
