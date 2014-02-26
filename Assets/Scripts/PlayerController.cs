@@ -14,9 +14,7 @@ public class PlayerController : MonoBehaviour {
 	public float switchCooldown = .25f; // Cooldown between switches
 	private float nextSwitchTime = 0f; // Time at which we can switch characters next
 	
-	private Transform groundCheck; // A position to check if we're grounded
-	
-	private bool grounded; // Check for whether we're on the ground
+	private GroundCheck groundCheck; // Ground check script
 	private bool jump; // Are we jumping?
 
 	// Riding a mover
@@ -35,10 +33,9 @@ public class PlayerController : MonoBehaviour {
 	
 	void Awake()
 	{
-		groundCheck = transform.Find("Ground Check");
+		groundCheck = transform.Find("Ground Check").GetComponent<GroundCheck>();
 		SwitchPlayer();
 		activatorsList = new Hashtable();
-		
 	}
 	
 	void SwitchPlayer()
@@ -95,13 +92,11 @@ public class PlayerController : MonoBehaviour {
 	
 	void Update ()
 	{
-		// Check if we are grounded on the left OR on the right
-		this.grounded = Physics2D.Linecast (transform.position, groundCheck.position, 1 << LayerMask.NameToLayer ("Ground"));
+		bool grounded = groundCheck.isGrounded();
 
-		if (Input.GetButtonDown ("Jump") && this.grounded)
+		if (Input.GetButtonDown ("Jump") && grounded)
 		{
 			this.jump = true; // We jump!
-			this.grounded = false;
 		}
 		
 		if (Input.GetButton("SwitchPlayer") && Time.time > nextSwitchTime)
@@ -120,29 +115,31 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter2D(Collision2D collision)
-	{
-		Debug.Log ("COLLIDED!");
-		if (collision.gameObject.tag == "Moving" && this.grounded)
-		{
-			this.onMover = true;
-			mover = (IMover) collision.gameObject.GetComponent(typeof(IMover));
-			moverID = collision.gameObject.GetInstanceID();
-			Debug.Log ("current mover: " + moverID);
-		}
-	}
+	
 
-	void OnCollisionExit2D(Collision2D collision)
-	{
-		Debug.Log ("exiting ID " + collision.gameObject.GetInstanceID());
-		if (collision.gameObject.tag == "Moving" && collision.gameObject.GetInstanceID() == this.moverID)
-		{
-			Debug.Log ("no longer moving");
-			this.onMover = false;
-			mover = null;
-			moverID = -1;
-		}
-	}
+//	void OnCollisionEnter2D(Collision2D collision)
+//	{
+//		Debug.Log ("COLLIDED!");
+//		if (collision.gameObject.tag == "Moving" && this.grounded)
+//		{
+//			this.onMover = true;
+//			mover = (IMover) collision.gameObject.GetComponent(typeof(IMover));
+//			moverID = collision.gameObject.GetInstanceID();
+//			Debug.Log ("current mover: " + moverID);
+//		}
+//	}
+//
+//	void OnCollisionExit2D(Collision2D collision)
+//	{
+//		Debug.Log ("exiting ID " + collision.gameObject.GetInstanceID());
+//		if (collision.gameObject.tag == "Moving" && collision.gameObject.GetInstanceID() == this.moverID)
+//		{
+//			Debug.Log ("no longer moving");
+//			this.onMover = false;
+//			mover = null;
+//			moverID = -1;
+//		}
+//	}
 
 	
 	void FixedUpdate()
