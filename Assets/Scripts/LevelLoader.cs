@@ -2,16 +2,14 @@
 using System.Collections;
 
 public class LevelLoader : MonoBehaviour,IActivator {
-	public string[] Scenes;
-	private int sceneIndex = 0;
 
 
 	public void Activate()
 	{
-		if (sceneIndex < Scenes.Length - 1)
+		int loadedLevel = Application.loadedLevel;
+		if (loadedLevel < Application.levelCount - 1)
 		{
-			sceneIndex += 1;
-			Application.LoadLevel(Scenes[sceneIndex]);
+			Application.LoadLevel (loadedLevel + 1);
 		}
 		else
 		{

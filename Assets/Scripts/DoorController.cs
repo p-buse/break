@@ -11,7 +11,6 @@ public class DoorController : MonoBehaviour,IActivator {
 
 	public void Activate()
 	{
-		Debug.Log("Door activated!");
 		gameController.Activate();
 	}
 
