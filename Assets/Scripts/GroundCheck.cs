@@ -6,9 +6,10 @@ public class GroundCheck : MonoBehaviour {
 	private float colliderRadius;
 	private bool grounded;
 	private bool onMover;
-	private IMover mover;
+
 	private int moverID;
 	private RaycastHit2D[] theGround = new RaycastHit2D[1];
+	private IMover mover; // The mover script
 
 	void Awake()
 	{
@@ -29,23 +30,36 @@ public class GroundCheck : MonoBehaviour {
 
 
 		// CHECK FOR MOVER
-		Collider2D collider = theGround[0].collider;
-		if (collider.gameObject.tag == "Moving")
+
+		if (this.grounded)
 		{
-			this.onMover = true;
-			mover = (IMover) collider.gameObject.GetComponent(typeof(IMover));
-			moverID = collision.gameObject.GetInstanceID();
-			Debug.Log ("current mover: " + moverID);
+			Collider2D collider = theGround [0].collider;
+			if (collider.gameObject.tag == "Moving")
+			{
+				this.onMover = true;
+				mover = (IMover)collider.gameObject.GetComponent (typeof(IMover));
+				moverID = collider.gameObject.GetInstanceID ();
+			}
+		}
+		else
+		{
+			this.onMover = false;
+			mover = null;
+			moverID = -1;
 		}
 	}
 
-	public bool isGrounded()
+	public bool IsGrounded()
 	{
 		return this.grounded;
 	}
 
-	public bool isOnMover()
+	public bool IsOnMover()
 	{
 		return this.onMover;
+	}
+	public Vector3 GetMovement()
+	{
+		return this.mover.Movement();
 	}
 }

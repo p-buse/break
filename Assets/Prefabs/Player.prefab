@@ -15,40 +15,9 @@ GameObject:
   - 114: {fileID: 11400000}
   - 212: {fileID: 21200000}
   - 61: {fileID: 6100000}
-  - 58: {fileID: 5800002}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &100002
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400002}
-  m_Layer: 0
-  m_Name: Ground Check Right
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &100004
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400004}
-  m_Layer: 0
-  m_Name: Ground Check Left
-  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,8 +31,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 400006}
   - 58: {fileID: 5800000}
+  - 114: {fileID: 11400008}
   m_Layer: 0
-  m_Name: Jump Check
+  m_Name: Ground Check
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,35 +46,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.3408394, y: 8.18140411, z: 0}
+  m_LocalPosition: {x: -10.42836, y: 8.33424759, z: 0}
   m_LocalScale: {x: .200000003, y: .200000003, z: 1}
   m_Children:
   - {fileID: 400006}
-  - {fileID: 400004}
-  - {fileID: 400002}
   m_Father: {fileID: 0}
---- !u!4 &400002
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .25, y: -3.0999999, z: 0}
-  m_LocalScale: {x: 1, y: .5, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400000}
---- !u!4 &400004
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.75, y: -3.0999999, z: 0}
-  m_LocalScale: {x: 1, y: .5, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400000}
 --- !u!4 &400006
 Transform:
   m_ObjectHideFlags: 1
@@ -112,7 +58,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.25, y: -3, z: 0}
+  m_LocalPosition: {x: -.00499999989, y: -1.99000001, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 1}
   m_Children: []
   m_Father: {fileID: 400000}
@@ -140,19 +86,8 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: abc3134ec321b8c4aa1e168c20210390, type: 2}
   m_IsTrigger: 0
-  m_Radius: .148000002
-  m_Center: {x: .0549999997, y: .140000001}
---- !u!58 &5800002
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 0
-  m_Material: {fileID: 6200000, guid: abc3134ec321b8c4aa1e168c20210390, type: 2}
-  m_IsTrigger: 0
-  m_Radius: .74000001
-  m_Center: {x: .0299999993, y: -2.27999997}
+  m_Radius: .150000006
+  m_Center: {x: .00600000005, y: 0}
 --- !u!61 &6100000
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -162,8 +97,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 6200000, guid: abc3134ec321b8c4aa1e168c20210390, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1.50475645, y: 5.44963837}
-  m_Center: {x: .0243234634, y: .308132172}
+  m_Size: {x: 1.50475645, y: 5.08665562}
+  m_Center: {x: .0243234634, y: .489616394}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -224,6 +159,18 @@ MonoBehaviour:
   greenPlayer: {fileID: 11400002}
   bluePlayer: {fileID: 11400000}
   switchCooldown: .25
+--- !u!114 &11400008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 128c856f1d81f164884a4c3f2264efca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distanceDownToCheck: .00999999978
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
