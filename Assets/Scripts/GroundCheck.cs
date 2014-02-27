@@ -7,7 +7,6 @@ public class GroundCheck : MonoBehaviour {
 	private bool grounded;
 	private bool onMover;
 
-	private int moverID;
 	private RaycastHit2D[] theGround = new RaycastHit2D[1];
 	private IMover mover; // The mover script
 
@@ -38,14 +37,12 @@ public class GroundCheck : MonoBehaviour {
 			{
 				this.onMover = true;
 				mover = (IMover)collider.gameObject.GetComponent (typeof(IMover));
-				moverID = collider.gameObject.GetInstanceID ();
 			}
 		}
 		else
 		{
 			this.onMover = false;
 			mover = null;
-			moverID = -1;
 		}
 	}
 
