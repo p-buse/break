@@ -9,8 +9,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 212: {fileID: 21200000}
-  - 61: {fileID: 6100000}
   - 114: {fileID: 11400000}
+  - 61: {fileID: 6100000}
   m_Layer: 9
   m_Name: Exit Door
   m_TagString: Mechanical
@@ -25,8 +25,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.09824562, y: 3.26630783, z: 0}
-  m_LocalScale: {x: .516181231, y: .516180694, z: 1}
+  m_LocalPosition: {x: -.210781708, y: 12.7862673, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
 --- !u!61 &6100000
@@ -38,8 +38,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: 1.60790002, y: 2.84948111}
-  m_Center: {x: -.0184201449, y: -.0368403271}
+  m_Size: {x: 1, y: 2}
+  m_Center: {x: 0, y: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_SortingLayerID: 762945009
-  m_Sprite: {fileID: 21300002, guid: b0879678a7b39414fb87b4223455d46b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3e8022b9685956a468f13d5fa83baab1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:

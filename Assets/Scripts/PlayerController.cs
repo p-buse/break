@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
-	
+
 	
 	public PlayerCharacteristics redPlayer;
 	public PlayerCharacteristics greenPlayer;
@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
 	private PlayerCharacteristics currentPlayer; // Reference to the currently selected player
 	private float jumpForce; // Our current jump force
 	private float moveSpeed; // Our current move speed
+	private SpriteRenderer spriteRenderer;
 	
 	public float switchCooldown = .25f; // Cooldown between switches
 	private float nextSwitchTime = 0f; // Time at which we can switch characters next
@@ -19,14 +20,19 @@ public class PlayerController : MonoBehaviour {
 
 
 	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
-
+	private GUIText selectedPlayerGUI;
 	
 	
 	void Awake()
 	{
 		groundCheck = transform.Find("Ground Check").GetComponent<GroundCheck>();
-		SwitchPlayer();
+		spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 		activatorsList = new Hashtable();
+		selectedPlayerGUI = GameObject.FindWithTag("GameController").GetComponent<GUIText>();
+		if (selectedPlayerGUI == null)
+			Debug.Log ("guitext not found!");
+		SwitchPlayer ();
+	
 		
 	}
 
@@ -37,10 +43,6 @@ public class PlayerController : MonoBehaviour {
 	
 	void SwitchPlayer()
 	{
-		// Initial setup
-		if (currentPlayer == null)
-			currentPlayer = bluePlayer;
-		
 		// Cycle through the three different players
 		if (currentPlayer == redPlayer)
 			currentPlayer = greenPlayer;
@@ -48,10 +50,16 @@ public class PlayerController : MonoBehaviour {
 			currentPlayer = bluePlayer;
 		else
 			currentPlayer = redPlayer;
-		
+
+		// For beginning, when player is null
+		if (currentPlayer == null)
+			currentPlayer = redPlayer;
 		// Update our local values
 		this.jumpForce = currentPlayer.jumpForce;
 		this.moveSpeed = currentPlayer.moveSpeed;
+		spriteRenderer.color = currentPlayer.playerColor;
+		selectedPlayerGUI.text = "Player: " + currentPlayer.playerName;
+		selectedPlayerGUI.color = currentPlayer.playerColor;
 		
 	}
 

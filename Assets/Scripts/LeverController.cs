@@ -21,9 +21,9 @@ public class LeverController : MonoBehaviour,IActivator
 	/// </summary>
 	public void Activate()
 	{
-		bool leverIsLeft = animationController.GetBool("isLeft");
-		leverIsLeft = !leverIsLeft;
-		animationController.SetBool("isLeft",leverIsLeft);
+		bool leverIsOn = animationController.GetBool("isOn");
+		leverIsOn = !leverIsOn;
+		animationController.SetBool("isOn",leverIsOn);
 		activateScript.Activate();
 	}
 

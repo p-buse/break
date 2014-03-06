@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b0879678a7b39414fb87b4223455d46b
+guid: cccd09a00ae3bdb42b20d5f8cb2ebb9c
 TextureImporter:
   serializedVersion: 2
   mipmaps:
@@ -24,13 +24,13 @@ TextureImporter:
   maxTextureSize: 1024
   textureSettings:
     filterMode: -1
-    aniso: 1
+    aniso: -1
     mipBias: -1
-    wrapMode: 1
+    wrapMode: -1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -44,24 +44,6 @@ TextureImporter:
     textureFormat: -2
     compressionQuality: 50
   spriteSheet:
-    sprites:
-    - name: exit_sign
-      rect:
-        serializedVersion: 2
-        x: 8
-        y: 292
-        width: 228
-        height: 170
-      alignment: 0
-      pivot: {x: .5, y: .5}
-    - name: door
-      rect:
-        serializedVersion: 2
-        x: 259
-        y: 194
-        width: 206
-        height: 308
-      alignment: 0
-      pivot: {x: .5, y: .5}
+    sprites: []
   spritePackingTag: 
   userData: 

@@ -6,6 +6,7 @@ public class GroundCheck : MonoBehaviour {
 	private float colliderRadius;
 	private bool grounded;
 	private bool onMover;
+	private int groundLayer;
 
 	private RaycastHit2D[] theGround = new RaycastHit2D[1];
 	private IMover mover; // The mover script
@@ -13,17 +14,15 @@ public class GroundCheck : MonoBehaviour {
 	void Awake()
 	{
 		this.colliderRadius = GetComponent<CircleCollider2D>().radius;
+		this.groundLayer = 1 << LayerMask.NameToLayer("Ground");
 	}
 
 	void Update()
 	{
 		Vector3 bottomOfCollider = transform.position - new Vector3(0f, colliderRadius + distanceDownToCheck, 0f);
-
-		// CHECK FOR GROUND
-		// Get the layer ID of the ground
-		int groundLayer = 1 << LayerMask.NameToLayer("Ground");
 		// Cast a line and check if it collides with ground
 		int numGround = Physics2D.LinecastNonAlloc (transform.position, bottomOfCollider, theGround, groundLayer);
+		Debug.DrawLine (transform.position,bottomOfCollider,Color.red);
 		// If we collided with > 0 "Ground" objects, then we're grounded!
 		this.grounded = (numGround > 0);
 
