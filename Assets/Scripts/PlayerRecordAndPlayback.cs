@@ -8,22 +8,18 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 
 	public Transform playerTransform;
 	private Queue<RecordedFrame> recordingQueue;
-	private float timeSinceLastFrame;
 	private RecordingState recordingState;
 	enum RecordingState {Idle, Record, Play};
 	class RecordedFrame
 	{
-		public float timeSinceLast;
 		public Vector3 playerPosition;
 
 		/// <summary>
 		/// Initializes a new recorded frame which includes a delta time and x,y,z position.
 		/// </summary>
-		/// <param name="timeSinceLast">Time since last frame.</param>
 		/// <param name="playerPosition">Player position.</param>
-		public RecordedFrame(float timeSinceLast, Vector3 playerPosition)
+		public RecordedFrame(Vector3 playerPosition)
 		{
-			this.timeSinceLast = timeSinceLast;
 			this.playerPosition = playerPosition;
 		}
 	}
@@ -66,14 +62,8 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 		case RecordingState.Play:
 			if (recordingQueue.Count != 0)
 			{
-				RecordedFrame nextFrame = recordingQueue.Peek();
-				timeSinceLastFrame += Time.deltaTime;
-				if (nextFrame.timeSinceLast < timeSinceLastFrame)
-				{
+					RecordedFrame nextFrame = recordingQueue.Dequeue();
 					playerTransform.position = nextFrame.playerPosition;
-					timeSinceLastFrame = 0f;
-					recordingQueue.Dequeue();
-				}
 			}
 			else
 			{
@@ -82,7 +72,7 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 			break;
 
 		case RecordingState.Record:
-			RecordedFrame thisFrame = new RecordedFrame(Time.deltaTime, playerTransform.position);
+			RecordedFrame thisFrame = new RecordedFrame(playerTransform.position);
 			recordingQueue.Enqueue(thisFrame);
 			break;
 

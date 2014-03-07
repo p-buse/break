@@ -1009,6 +1009,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5000000, guid: 9c39dc7a3d290984c96110dc9f1bd788, type: 2}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9c39dc7a3d290984c96110dc9f1bd788, type: 2}
   m_RootGameObject: {fileID: 1897217150}
@@ -1424,6 +1428,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d4d0e5922ae4e543bdfdec0381f5de3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recordSymbol: {fileID: 2800000, guid: c7909182abdcca94ab0ac809edbfbc61, type: 3}
+  playSymbol: {fileID: 2800000, guid: c217d137e0ff7504b8b2fbbbe49465d1, type: 3}
   playerTransform: {fileID: 1897217151}
 --- !u!1 &1345537783
 GameObject:
