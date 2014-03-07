@@ -22,7 +22,6 @@ public class GroundCheck : MonoBehaviour {
 		Vector3 bottomOfCollider = transform.position - new Vector3(0f, colliderRadius + distanceDownToCheck, 0f);
 		// Cast a line and check if it collides with ground
 		int numGround = Physics2D.LinecastNonAlloc (transform.position, bottomOfCollider, theGround, groundLayer);
-		Debug.DrawLine (transform.position,bottomOfCollider,Color.red);
 		// If we collided with > 0 "Ground" objects, then we're grounded!
 		this.grounded = (numGround > 0);
 
