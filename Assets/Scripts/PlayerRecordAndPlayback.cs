@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 public class PlayerRecordAndPlayback : MonoBehaviour {
 
+	public Texture2D recordSymbol;
+	public Texture2D playSymbol;
+
 	public Transform playerTransform;
 	private Queue<RecordedFrame> recordingQueue;
 	private float timeSinceLastFrame;
@@ -36,19 +39,16 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 	{
 		if (this.recordingState == RecordingState.Idle)
 		{
-			Debug.Log ("STATE: Record");
 			this.recordingState = RecordingState.Record;
 			// Clear the recorded frames
 			recordingQueue = new Queue<RecordedFrame>();
 		}
 		else if (this.recordingState == RecordingState.Record)
 		{
-			Debug.Log ("STATE: Play");
 			this.recordingState = RecordingState.Play;
 		}
 		else if (this.recordingState == RecordingState.Play)
 		{
-			Debug.Log ("STATE: Idle");
 			this.recordingState = RecordingState.Idle;
 		}
 	}
@@ -60,8 +60,10 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 			SwitchState ();
 		}
 
-		if (this.recordingState == RecordingState.Play)
+		switch (this.recordingState)
 		{
+
+		case RecordingState.Play:
 			if (recordingQueue.Count != 0)
 			{
 				RecordedFrame nextFrame = recordingQueue.Peek();
@@ -77,11 +79,31 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 			{
 				recordingState = RecordingState.Idle;
 			}
-		}
-		else if (this.recordingState == RecordingState.Record)
-		{
+			break;
+
+		case RecordingState.Record:
 			RecordedFrame thisFrame = new RecordedFrame(Time.deltaTime, playerTransform.position);
 			recordingQueue.Enqueue(thisFrame);
+			break;
+
+		case RecordingState.Idle:
+			break;
+		}
+	}
+
+	void OnGUI()
+	{
+		switch (recordingState)
+		{
+		case RecordingState.Idle:
+			GUI.Box (new Rect (Screen.width - 100,0,100,50), "IDLE");
+			break;
+		case RecordingState.Record:
+			GUI.Box (new Rect (Screen.width - 100,0,100,50), recordSymbol);
+			break;
+		case RecordingState.Play:
+			GUI.Box (new Rect (Screen.width - 100,0,100,50), playSymbol);
+			break;
 		}
 
 
