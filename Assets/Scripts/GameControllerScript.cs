@@ -7,14 +7,15 @@ public class GameControllerScript : MonoBehaviour {
 	public PlayerController greenPlayer;
 	public PlayerController bluePlayer;
 	private PlayerController currentPlayer;
+
 	private float nextSwitchTime = 0f;
 	private float switchCooldown = 0.25f;
 
 	
 	void Start () {
-		// Sets the current player to Red
-		SwitchPlayer ();
-	
+		currentPlayer = redPlayer;
+		guiText.text = "Player: " + currentPlayer.playerName;
+		guiText.color = currentPlayer.GetPlayerColor();
 	}
 
 	void Update () {
@@ -47,6 +48,9 @@ public class GameControllerScript : MonoBehaviour {
 
 	void SwitchPlayer()
 	{
+		// Stop movement of current player
+		currentPlayer.MoveHorizontal(0f);
+
 		// Cycle through the three different players
 		if (currentPlayer == redPlayer)
 			currentPlayer = greenPlayer;
@@ -54,16 +58,11 @@ public class GameControllerScript : MonoBehaviour {
 			currentPlayer = bluePlayer;
 		else
 			currentPlayer = redPlayer;
-	
-		// For initializing
-		if (currentPlayer == null)
-			currentPlayer = redPlayer;
 
 		guiText.text = "Player: " + currentPlayer.playerName;
 		guiText.color = currentPlayer.GetPlayerColor();
 
-		// Stop movement of current player
-		currentPlayer.MoveHorizontal(0f);
+
 		
 	}
 }

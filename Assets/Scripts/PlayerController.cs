@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour {
 	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
 	
 	
-	void Awake()
+	void Start()
 	{
 		groundCheck = transform.Find("Ground Check").GetComponent<GroundCheck>();
 		activatorsList = new Hashtable();

@@ -10,6 +10,12 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 	private Queue<RecordedFrame> recordingQueue;
 	private RecordingState recordingState;
 	enum RecordingState {Idle, Record, Play};
+	class InputFrame
+	{
+		public float inputHorizontal;
+		public bool jumpInput;
+		public bool activateInput;
+	}
 	class RecordedFrame
 	{
 		public Vector3 playerPosition;
