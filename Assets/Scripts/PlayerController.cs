@@ -3,35 +3,28 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
-	
-	public PlayerCharacteristics redPlayer;
-	public PlayerCharacteristics greenPlayer;
-	public PlayerCharacteristics bluePlayer;
-	private PlayerCharacteristics currentPlayer; // Reference to the currently selected player
-	private float jumpForce; // Our current jump force
-	private float moveSpeed; // Our current move speed
-	private SpriteRenderer spriteRenderer;
-	
+
+	public float jumpForce; // Our jump force
+	public float moveSpeed; // Our horizontal movement speed
+	public string playerName; // Our player's name
+	private Color playerColor; // Our player's color (set in the Sprite)
+
 	public float switchCooldown = .25f; // Cooldown between switches
 	private float nextSwitchTime = 0f; // Time at which we can switch characters next
 	
 	private GroundCheck groundCheck; // Ground check script
 	private bool jump; // Are we jumping?
+	private float horizontalMovement = 0f;
 
 
 	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
-	private GUIText selectedPlayerGUI;
 	
 	
 	void Awake()
 	{
 		groundCheck = transform.Find("Ground Check").GetComponent<GroundCheck>();
-		spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 		activatorsList = new Hashtable();
-		selectedPlayerGUI = GameObject.FindWithTag("GameController").GetComponent<GUIText>();
-		if (selectedPlayerGUI == null)
-			Debug.Log ("guitext not found!");
-		SwitchPlayer ();
+		this.playerColor = GetComponent<SpriteRenderer>().color;
 	
 		
 	}
@@ -41,27 +34,7 @@ public class PlayerController : MonoBehaviour {
 		activatorsList = new Hashtable(); // Clear the activators list
 	}
 	
-	void SwitchPlayer()
-	{
-		// Cycle through the three different players
-		if (currentPlayer == redPlayer)
-			currentPlayer = greenPlayer;
-		else if (currentPlayer == greenPlayer)
-			currentPlayer = bluePlayer;
-		else
-			currentPlayer = redPlayer;
 
-		// For beginning, when player is null
-		if (currentPlayer == null)
-			currentPlayer = redPlayer;
-		// Update our local values
-		this.jumpForce = currentPlayer.jumpForce;
-		this.moveSpeed = currentPlayer.moveSpeed;
-		spriteRenderer.color = currentPlayer.playerColor;
-		selectedPlayerGUI.text = "Player: " + currentPlayer.playerName;
-		selectedPlayerGUI.color = currentPlayer.playerColor;
-		
-	}
 
 	void OnTriggerEnter2D(Collider2D collider)
 	{
@@ -93,42 +66,41 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 	
-	
-	void Update ()
+
+
+	/*
+	 * These public methods are called by the game controller
+	 */
+	public void MoveHorizontal(float horizontalInput)
 	{
-		bool grounded = groundCheck.IsGrounded();
-
-		if (Input.GetButtonDown ("Jump") && grounded)
-		{
-			this.jump = true; // We jump!
-		}
-		
-		if (Input.GetButton("SwitchPlayer") && Time.time > nextSwitchTime)
-		{
-			nextSwitchTime = Time.time + this.switchCooldown;
-			SwitchPlayer ();
-		}
-
-		if (Input.GetButtonDown ("Action"))
-		{
-			// Activate anything we're currently touching
-			foreach (IActivator activator in activatorsList.Values)
-			{
-				activator.Activate();
-			}
-		}
+		this.horizontalMovement = horizontalInput;
 	}
 
-	
+	public void Jump()
+	{
+		// Only jump if we're on the ground
+		bool grounded = groundCheck.IsGrounded();
+		if (grounded)
+			this.jump = true;
+	}
+
+	public void Activate()
+	{
+		foreach (IActivator activator in activatorsList.Values)
+			activator.Activate();
+	}
+
+	public Color GetPlayerColor()
+	{
+		return this.playerColor;
+	}
 
 
 	
 	void FixedUpdate()
 	{
-		// Make us move horizontally
-		float inputHorizontal = Input.GetAxis ("Horizontal");
-		inputHorizontal *= moveSpeed;
-		rigidbody2D.velocity = new Vector2(inputHorizontal, rigidbody2D.velocity.y);
+		// Set the velocity to negative or positive of our movespeed
+		rigidbody2D.velocity = new Vector2(this.horizontalMovement * this.moveSpeed, rigidbody2D.velocity.y);
 		
 		if (this.jump)
 		{
