@@ -9,18 +9,15 @@ public class PlayerController : MonoBehaviour {
 	public string playerName; // Our player's name
 	private Color playerColor; // Our player's color (set in the Sprite)
 
-	public float switchCooldown = .25f; // Cooldown between switches
-	private float nextSwitchTime = 0f; // Time at which we can switch characters next
-	
 	private GroundCheck groundCheck; // Ground check script
 	private bool jump; // Are we jumping?
-	private float horizontalMovement = 0f;
+	private float horizontalMovement = 0f; // Holds our current horizontal movement.
 
 
 	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
 	
 	
-	void Start()
+	void Awake()
 	{
 		groundCheck = transform.Find("Ground Check").GetComponent<GroundCheck>();
 		activatorsList = new Hashtable();

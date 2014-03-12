@@ -7,33 +7,35 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 	public Texture2D playSymbol;
 
 	public Transform playerTransform;
-	private Queue<RecordedFrame> recordingQueue;
+	private LinkedList<RecordedInput> recordedFrames;
+	private IEnumerator<RecordedInput> playbackHead;
 	private RecordingState recordingState;
 	enum RecordingState {Idle, Record, Play};
-	class InputFrame
+	class RecordedInput
 	{
 		public float inputHorizontal;
 		public bool jumpInput;
 		public bool activateInput;
-	}
-	class RecordedFrame
-	{
-		public Vector3 playerPosition;
 
 		/// <summary>
-		/// Initializes a new recorded frame which includes a delta time and x,y,z position.
+		/// Initializes a new recorded frame.
 		/// </summary>
-		/// <param name="playerPosition">Player position.</param>
-		public RecordedFrame(Vector3 playerPosition)
+		/// <param name="inputHorizontal">Horizontal input.</param>
+		/// <param name="jumpInput">If set to <c>true</c> we're jumping</param>
+		/// <param name="activateInput">If set to <c>true</c> awe're activating.</param>
+		public RecordedInput(float inputHorizontal, bool jumpInput, bool activateInput)
 		{
-			this.playerPosition = playerPosition;
+			this.inputHorizontal = inputHorizontal;
+			this.jumpInput = jumpInput;
+			this.activateInput = activateInput;
 		}
 	}
+
 	
 
 	void Awake()
 	{
-		this.recordingQueue = new Queue<RecordedFrame>();
+		this.recordedFrames = new LinkedList<RecordedInput>();
 		recordingState = RecordingState.Idle;
 	}
 
@@ -43,11 +45,13 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 		{
 			this.recordingState = RecordingState.Record;
 			// Clear the recorded frames
-			recordingQueue = new Queue<RecordedFrame>();
+			recordedFrames = new LinkedList<RecordedInput>();
 		}
 		else if (this.recordingState == RecordingState.Record)
 		{
+			// Start playing and set the playback head to the beginning of the linked list
 			this.recordingState = RecordingState.Play;
+			this.playbackHead = recordedFrames.GetEnumerator();
 		}
 		else if (this.recordingState == RecordingState.Play)
 		{
@@ -66,11 +70,7 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 		{
 
 		case RecordingState.Play:
-			if (recordingQueue.Count != 0)
-			{
-					RecordedFrame nextFrame = recordingQueue.Dequeue();
-					playerTransform.position = nextFrame.playerPosition;
-			}
+			if (playbackHead.)
 			else
 			{
 				recordingState = RecordingState.Idle;
@@ -78,7 +78,7 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 			break;
 
 		case RecordingState.Record:
-			RecordedFrame thisFrame = new RecordedFrame(playerTransform.position);
+			RecordedInput thisFrame = new RecordedInput(playerTransform.position);
 			recordingQueue.Enqueue(thisFrame);
 			break;
 

@@ -13,15 +13,14 @@ public class GameControllerScript : MonoBehaviour {
 
 	
 	void Start () {
-		currentPlayer = redPlayer;
-		guiText.text = "Player: " + currentPlayer.playerName;
-		guiText.color = currentPlayer.GetPlayerColor();
+		// Change us to red initially
+		SwitchPlayer();
 	}
 
 	void Update () {
 
 		/*
-		 * INPUT *
+		 * ROUTE INPUT *
 		 */
 
 		if (Input.GetButton("SwitchPlayer") && Time.time > nextSwitchTime)
@@ -49,7 +48,8 @@ public class GameControllerScript : MonoBehaviour {
 	void SwitchPlayer()
 	{
 		// Stop movement of current player
-		currentPlayer.MoveHorizontal(0f);
+		if (currentPlayer != null)
+			currentPlayer.MoveHorizontal(0f);
 
 		// Cycle through the three different players
 		if (currentPlayer == redPlayer)
@@ -57,6 +57,10 @@ public class GameControllerScript : MonoBehaviour {
 		else if (currentPlayer == greenPlayer)
 			currentPlayer = bluePlayer;
 		else
+			currentPlayer = redPlayer;
+
+		// Start as the red player
+		if (currentPlayer == null)
 			currentPlayer = redPlayer;
 
 		guiText.text = "Player: " + currentPlayer.playerName;
