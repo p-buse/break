@@ -69,4 +69,9 @@ public class GameControllerScript : MonoBehaviour {
 
 		
 	}
+
+	public PlayerController CurrentPlayer()
+	{
+		return this.currentPlayer;
+	}
 }

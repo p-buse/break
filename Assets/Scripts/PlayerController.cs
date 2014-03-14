@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
-
-
 	public float jumpForce; // Our jump force
 	public float moveSpeed; // Our horizontal movement speed
 	public string playerName; // Our player's name
@@ -13,9 +11,7 @@ public class PlayerController : MonoBehaviour {
 	private bool jump; // Are we jumping?
 	private float horizontalMovement = 0f; // Holds our current horizontal movement.
 
-
 	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
-	
 	
 	void Awake()
 	{
@@ -30,8 +26,6 @@ public class PlayerController : MonoBehaviour {
 	{
 		activatorsList = new Hashtable(); // Clear the activators list
 	}
-	
-
 
 	void OnTriggerEnter2D(Collider2D collider)
 	{
@@ -62,38 +56,7 @@ public class PlayerController : MonoBehaviour {
 			activatorsList.Remove(activatorID);
 		}
 	}
-	
 
-
-	/*
-	 * These public methods are called by the game controller
-	 */
-	public void MoveHorizontal(float horizontalInput)
-	{
-		this.horizontalMovement = horizontalInput;
-	}
-
-	public void Jump()
-	{
-		// Only jump if we're on the ground
-		bool grounded = groundCheck.IsGrounded();
-		if (grounded)
-			this.jump = true;
-	}
-
-	public void Activate()
-	{
-		foreach (IActivator activator in activatorsList.Values)
-			activator.Activate();
-	}
-
-	public Color GetPlayerColor()
-	{
-		return this.playerColor;
-	}
-
-
-	
 	void FixedUpdate()
 	{
 		// Set the velocity to negative or positive of our movespeed
@@ -110,5 +73,32 @@ public class PlayerController : MonoBehaviour {
 			transform.Translate(groundCheck.GetMovement());
 		}
 		
+	}
+
+	/*
+	 ************** PUBLIC METHODS ***************
+	 */
+	public void MoveHorizontal(float horizontalInput)
+	{
+		this.horizontalMovement = horizontalInput;
+	}
+	
+	public void Jump()
+	{
+		// Only jump if we're on the ground
+		bool grounded = groundCheck.IsGrounded();
+		if (grounded)
+			this.jump = true;
+	}
+	
+	public void Activate()
+	{
+		foreach (IActivator activator in activatorsList.Values)
+			activator.Activate();
+	}
+	
+	public Color GetPlayerColor()
+	{
+		return this.playerColor;
 	}
 }

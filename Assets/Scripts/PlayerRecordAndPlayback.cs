@@ -6,7 +6,7 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 	public Texture2D recordSymbol;
 	public Texture2D playSymbol;
 
-	public Transform playerTransform;
+	private GameControllerScript gameController;
 	private LinkedList<RecordedInput> recordedFrames;
 	private IEnumerator<RecordedInput> playbackHead;
 	private RecordingState recordingState;
@@ -29,6 +29,12 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 			this.jumpInput = jumpInput;
 			this.activateInput = activateInput;
 		}
+		public RecordedInput()
+		{
+			this.inputHorizontal = 0f;
+			this.jumpInput = false;
+			this.activateInput = false;
+		}
 	}
 
 	
@@ -36,6 +42,7 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 	void Awake()
 	{
 		this.recordedFrames = new LinkedList<RecordedInput>();
+		this.gameController = GetComponent<GameControllerScript>();
 		recordingState = RecordingState.Idle;
 	}
 
@@ -59,7 +66,7 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 		}
 	}
 
-	void Update()
+	void LateUpdate()
 	{
 		if (Input.GetKeyDown (KeyCode.R))
 		{
@@ -70,16 +77,27 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 		{
 
 		case RecordingState.Play:
-			if (playbackHead.)
+			// If the playback head is not at the end, send our input, otherwise, loop!
+			if (playbackHead.MoveNext() != false)
+			{
+				SendInput(playbackHead.Current);
+			}
 			else
 			{
-				recordingState = RecordingState.Idle;
+				playbackHead.Reset();
 			}
 			break;
 
 		case RecordingState.Record:
-			RecordedInput thisFrame = new RecordedInput(playerTransform.position);
-			recordingQueue.Enqueue(thisFrame);
+			RecordedInput inputFrame = new RecordedInput();
+
+			// Capture our input
+			inputFrame.inputHorizontal = Input.GetAxis ("Horizontal");
+			inputFrame.jumpInput = Input.GetButtonDown ("Jump");
+			inputFrame.activateInput = Input.GetButtonDown ("Action");
+
+			// And append it to the list
+			recordedFrames.AddLast (inputFrame);
 			break;
 
 		case RecordingState.Idle:
@@ -103,6 +121,20 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 		}
 
 
+	}
+
+	void SendInput(RecordedInput input)
+	{
+		// Get the current player from our game controller
+		PlayerController currentPlayer = gameController.CurrentPlayer();
+		// Send our horizontal motion
+		currentPlayer.MoveHorizontal(input.inputHorizontal);
+		// Jump if we're jumping
+		if (input.jumpInput)
+			currentPlayer.Jump ();
+		// Activate if we're activating
+		if (input.activateInput)
+			currentPlayer.Activate();
 	}
 
 	

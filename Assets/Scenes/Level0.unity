@@ -2148,7 +2148,6 @@ MonoBehaviour:
   jumpForce: 1600
   moveSpeed: 8
   playerName: Green
-  switchCooldown: .25
 --- !u!50 &1206333185
 Rigidbody2D:
   m_ObjectHideFlags: 0
@@ -2364,7 +2363,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recordSymbol: {fileID: 2800000, guid: c7909182abdcca94ab0ac809edbfbc61, type: 3}
   playSymbol: {fileID: 2800000, guid: c217d137e0ff7504b8b2fbbbe49465d1, type: 3}
-  playerTransform: {fileID: 1897217151}
 --- !u!114 &1270211606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2645,7 +2643,6 @@ MonoBehaviour:
   jumpForce: 800
   moveSpeed: 16
   playerName: Blue
-  switchCooldown: .25
 --- !u!50 &1610115971
 Rigidbody2D:
   m_ObjectHideFlags: 0
@@ -3152,7 +3149,6 @@ MonoBehaviour:
   jumpForce: 1200
   moveSpeed: 12
   playerName: Red
-  switchCooldown: .25
 --- !u!50 &1897217158
 Rigidbody2D:
   m_ObjectHideFlags: 0
