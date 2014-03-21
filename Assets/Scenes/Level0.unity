@@ -719,6 +719,14 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: .999727964
       objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
   m_RootGameObject: {fileID: 1206333180}
@@ -2061,6 +2069,14 @@ Prefab:
       propertyPath: playerName
       value: Red
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 13e0c79340d9e4beba4c6e40877ce59c, type: 2}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 13e0c79340d9e4beba4c6e40877ce59c, type: 2}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13e0c79340d9e4beba4c6e40877ce59c, type: 2}
   m_RootGameObject: {fileID: 1897217150}
@@ -2210,6 +2226,14 @@ Prefab:
     - target: {fileID: 21200000, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf, type: 2}
       propertyPath: m_Color.b
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf, type: 2}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf, type: 2}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf, type: 2}
@@ -3482,8 +3506,8 @@ Transform:
   - {fileID: 1821833312}
   - {fileID: 1818527328}
   - {fileID: 2137602253}
-  - {fileID: 797193015}
   - {fileID: 846508743}
+  - {fileID: 797193015}
   - {fileID: 1772323148}
   - {fileID: 995630194}
   - {fileID: 206501720}

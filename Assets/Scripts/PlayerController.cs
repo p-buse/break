@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
 	private GroundCheck groundCheck; // Ground check script
 	private bool jump; // Are we jumping?
 	private float horizontalMovement = 0f; // Holds our current horizontal movement.
+	private Vector3 originalPosition;
 
 	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
 	
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour {
 		groundCheck = transform.Find("Ground Check").GetComponent<GroundCheck>();
 		activatorsList = new Hashtable();
 		this.playerColor = GetComponent<SpriteRenderer>().color;
+		this.originalPosition = transform.position;
 	
 		
 	}
@@ -78,27 +80,40 @@ public class PlayerController : MonoBehaviour {
 	/*
 	 ************** PUBLIC METHODS ***************
 	 */
-	public void MoveHorizontal(float horizontalInput)
-	{
-		this.horizontalMovement = horizontalInput;
-	}
-	
-	public void Jump()
-	{
-		// Only jump if we're on the ground
-		bool grounded = groundCheck.IsGrounded();
-		if (grounded)
-			this.jump = true;
-	}
-	
-	public void Activate()
-	{
-		foreach (IActivator activator in activatorsList.Values)
-			activator.Activate();
-	}
-	
+
 	public Color GetPlayerColor()
 	{
 		return this.playerColor;
+	}
+
+	public void ReceiveInput(CapturedInput capturedInput)
+	{
+		// Process horizontal movement
+		if (capturedInput.getLeft ())
+		{
+			this.horizontalMovement = -moveSpeed;
+		}
+		else if (capturedInput.getRight())
+		{
+			this.horizontalMovement = moveSpeed;
+		}
+		else
+			this.horizontalMovement = 0f;
+
+		// Process whether we're jumping
+		if (capturedInput.getJump() && groundCheck.IsGrounded())
+			this.jump = true;
+
+		// Process whether we're activating
+		if (capturedInput.getAction())
+		{
+			foreach (IActivator activator in activatorsList.Values)
+				activator.Activate();
+		}
+	}
+
+	public Vector3 GetOriginalPosition()
+	{
+		return this.originalPosition;
 	}
 }

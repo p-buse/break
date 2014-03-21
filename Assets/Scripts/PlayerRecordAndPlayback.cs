@@ -8,18 +8,15 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 	public Texture2D playSymbol;
 	private GameControllerScript gameController;
 	private LinkedList<CombinedInput> recordedFrames;
-	private LinkedList<RecordedInput> redFrames;
-	private LinkedList<RecordedInput> greenFrames;
-	private LinkedList<RecordedInput> blueFrames;
 	private IEnumerator<CombinedInput> playbackHead;
 	private RecordingState recordingState;
 	enum PlayerColor {Red = 0, Green = 1, Blue = 2};
 	enum RecordingState {Idle, Record, Play};
 	class CombinedInput
 	{
-		private RecordedInput redInput;
-		private RecordedInput greenInput;
-		private RecordedInput blueInput;
+		private CapturedInput redInput;
+		private CapturedInput greenInput;
+		private CapturedInput blueInput;
 
 		public CombinedInput()
 		{
@@ -28,29 +25,30 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 			blueInput = null;
 		}
 
+
 		/// <summary>
 		/// Adds the player input to this input frame. This replaces already existing input!
 		/// </summary>
 		/// <param name="playerColor">Player color to add</param>
 		/// <param name="recordedInput">Recorded input to add</param>
-		public void AddPlayerInput(PlayerColor playerColor, RecordedInput recordedInput)
+		public void AddPlayerInput(PlayerColor playerColor, CapturedInput capturedInput)
 		{
 			switch (playerColor)
 			{
 			case PlayerColor.Red:
 				if (redInput != null)
 					Debug.LogWarning("Replaced red input where input already existed!");
-				redInput = recordedInput;
+				redInput = capturedInput;
 				break;
 			case PlayerColor.Green:
 				if (greenInput != null)
 					Debug.LogWarning("Replaced green input where input already existed!");
-				greenInput = recordedInput;
+				greenInput = capturedInput;
 				break;
 			case PlayerColor.Blue:
 				if (blueInput != null)
 					Debug.LogWarning("Replaced blue input where input already existed!");
-				blueInput = recordedInput;
+				blueInput = capturedInput;
 				break;
 			}
 		}
@@ -58,7 +56,7 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 		/// Clears the player input for a particular color.
 		/// </summary>
 		/// <param name="playerColor">Player color to clear input of.</param>
-		public void ClearPlayerInput(PlayerColor playerColor)
+		public void ClearRecordedInput(PlayerColor playerColor)
 		{
 			switch (playerColor)
 			{
@@ -79,7 +77,7 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 		/// </summary>
 		/// <returns>A recorded frame of input</returns>
 		/// <param name="playerColor">Player color to get input of</param>
-		public RecordedInput GetPlayerInput(PlayerColor playerColor)
+		public CapturedInput GetPlayerInput(PlayerColor playerColor)
 		{
 			switch(playerColor)
 			{
@@ -87,52 +85,27 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 				if (redInput != null)
 					return redInput;
 				else
-					return new RecordedInput();
+					return new CapturedInput();
 				break;
 			case PlayerColor.Green:
 				if (greenInput != null)
 					return greenInput;
 				else
-					return new RecordedInput();
+					return new CapturedInput();
 				break;
 			case PlayerColor.Blue:
 				if (blueInput != null)
 					return blueInput;
 				else
-					return new RecordedInput();
+					return new CapturedInput();
 				break;
 			default:
 				Debug.LogError ("Invalid player color for GetPlayerInput!");
-				return new RecordedInput();
+				return new CapturedInput();
 				break;
 			}
 		}
 
-	}
-	class RecordedInput
-	{
-		public float inputHorizontal;
-		public bool jumpInput;
-		public bool activateInput;
-
-		/// <summary>
-		/// Initializes a new recorded frame.
-		/// </summary>
-		/// <param name="inputHorizontal">Horizontal input.</param>
-		/// <param name="jumpInput">If set to <c>true</c> we're jumping</param>
-		/// <param name="activateInput">If set to <c>true</c> awe're activating.</param>
-		public RecordedInput(float inputHorizontal, bool jumpInput, bool activateInput)
-		{
-			this.inputHorizontal = inputHorizontal;
-			this.jumpInput = jumpInput;
-			this.activateInput = activateInput;
-		}
-		public RecordedInput()
-		{
-			this.inputHorizontal = 0f;
-			this.jumpInput = false;
-			this.activateInput = false;
-		}
 	}
 
 	
