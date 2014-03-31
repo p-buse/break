@@ -18,39 +18,26 @@ public class GameControllerScript : MonoBehaviour {
 	}
 
 	void Update () {
-
-		/*
-		 * ROUTE INPUT *
-		 */
-
+		// Switch players, if pressing the switch button
 		if (Input.GetButton("SwitchPlayer") && Time.time > nextSwitchTime)
 		{
 			nextSwitchTime = Time.time + this.switchCooldown;
 			SwitchPlayer ();
 		}
 
-		// Get our horizontal input and send it to the current player
-		float horizontalMovement = Input.GetAxis ("Horizontal");
-		currentPlayer.MoveHorizontal(horizontalMovement);
+		// Capture our current input
+		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
+		bool rightKey = (Input.GetAxis ("Horizontal") > 0);
+		bool jumpKey = Input.GetButtonDown ("Jump");
+		bool actionKey = Input.GetButtonDown("Action");
+		CapturedInput currentInput = new CapturedInput(leftKey,rightKey,jumpKey,actionKey);
 
-		if (Input.GetButtonDown("Jump"))
-		{
-			currentPlayer.Jump ();
-		}
-
-		if (Input.GetButtonDown ("Action"))
-		{
-			currentPlayer.Activate();
-			
-		}
+		// Send our captured input to the current player
+		currentPlayer.ReceiveInput(currentInput);
 	}
 
 	void SwitchPlayer()
 	{
-		// Stop movement of current player
-		if (currentPlayer != null)
-			currentPlayer.MoveHorizontal(0f);
-
 		// Cycle through the three different players
 		if (currentPlayer == redPlayer)
 			currentPlayer = greenPlayer;
@@ -65,9 +52,6 @@ public class GameControllerScript : MonoBehaviour {
 
 		guiText.text = "Player: " + currentPlayer.playerName;
 		guiText.color = currentPlayer.GetPlayerColor();
-
-
-		
 	}
 
 	public PlayerController CurrentPlayer()

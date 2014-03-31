@@ -4,14 +4,16 @@ using System.Collections;
 
 public class PlayerRecordAndPlayback : MonoBehaviour {
 
+	// Image assets
 	public Texture2D recordSymbol;
 	public Texture2D playSymbol;
+
 	private GameControllerScript gameController;
 	private LinkedList<CombinedInput> recordedFrames;
 	private IEnumerator<CombinedInput> playbackHead;
+	enum RecordingState {Idle, Record, Play};
 	private RecordingState recordingState;
 	enum PlayerColor {Red = 0, Green = 1, Blue = 2};
-	enum RecordingState {Idle, Record, Play};
 	class CombinedInput
 	{
 		private CapturedInput redInput;

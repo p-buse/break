@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// Class for holding a frame of captured input.
 /// </summary>
-public class CapturedInput : MonoBehaviour {
+public class CapturedInput {
 
 	private BitArray inputArray;
 	enum Buttons {Left=0, Right=1, Jump=2, Action=3};
