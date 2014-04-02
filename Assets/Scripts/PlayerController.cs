@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour,IReset {
 	public float jumpForce; // Our jump force
 	public float moveSpeed; // Our horizontal movement speed
 	public string playerName; // Our player's name
@@ -20,8 +20,6 @@ public class PlayerController : MonoBehaviour {
 		activatorsList = new Hashtable();
 		this.playerColor = GetComponent<SpriteRenderer>().color;
 		this.originalPosition = transform.position;
-	
-		
 	}
 
 	void OnLevelWasLoaded()
@@ -112,8 +110,8 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	public Vector3 GetOriginalPosition()
+	public void Reset()
 	{
-		return this.originalPosition;
+		this.transform.position = this.originalPosition;
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using BreakGlobals;
 
 public class PlayerRecordAndPlayback : MonoBehaviour {
 
@@ -9,113 +10,31 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 	public Texture2D playSymbol;
 
 	private GameControllerScript gameController;
+
 	private LinkedList<CombinedInput> recordedFrames;
 	private IEnumerator<CombinedInput> playbackHead;
 	enum RecordingState {Idle, Record, Play};
 	private RecordingState recordingState;
-	enum PlayerColor {Red = 0, Green = 1, Blue = 2};
-	class CombinedInput
-	{
-		private CapturedInput redInput;
-		private CapturedInput greenInput;
-		private CapturedInput blueInput;
-
-		public CombinedInput()
-		{
-			redInput = null;
-			greenInput = null;
-			blueInput = null;
-		}
-
-
-		/// <summary>
-		/// Adds the player input to this input frame. This replaces already existing input!
-		/// </summary>
-		/// <param name="playerColor">Player color to add</param>
-		/// <param name="recordedInput">Recorded input to add</param>
-		public void AddPlayerInput(PlayerColor playerColor, CapturedInput capturedInput)
-		{
-			switch (playerColor)
-			{
-			case PlayerColor.Red:
-				if (redInput != null)
-					Debug.LogWarning("Replaced red input where input already existed!");
-				redInput = capturedInput;
-				break;
-			case PlayerColor.Green:
-				if (greenInput != null)
-					Debug.LogWarning("Replaced green input where input already existed!");
-				greenInput = capturedInput;
-				break;
-			case PlayerColor.Blue:
-				if (blueInput != null)
-					Debug.LogWarning("Replaced blue input where input already existed!");
-				blueInput = capturedInput;
-				break;
-			}
-		}
-		/// <summary>
-		/// Clears the player input for a particular color.
-		/// </summary>
-		/// <param name="playerColor">Player color to clear input of.</param>
-		public void ClearRecordedInput(PlayerColor playerColor)
-		{
-			switch (playerColor)
-			{
-			case PlayerColor.Red:
-				redInput = null;
-				break;
-			case PlayerColor.Green:
-				greenInput = null;
-				break;
-			case PlayerColor.Blue:
-				blueInput = null;
-				break;
-			}
-		}
-
-		/// <summary>
-		/// Gets the input for a particular color
-		/// </summary>
-		/// <returns>A recorded frame of input</returns>
-		/// <param name="playerColor">Player color to get input of</param>
-		public CapturedInput GetPlayerInput(PlayerColor playerColor)
-		{
-			switch(playerColor)
-			{
-			case PlayerColor.Red:
-				if (redInput != null)
-					return redInput;
-				else
-					return new CapturedInput();
-				break;
-			case PlayerColor.Green:
-				if (greenInput != null)
-					return greenInput;
-				else
-					return new CapturedInput();
-				break;
-			case PlayerColor.Blue:
-				if (blueInput != null)
-					return blueInput;
-				else
-					return new CapturedInput();
-				break;
-			default:
-				Debug.LogError ("Invalid player color for GetPlayerInput!");
-				return new CapturedInput();
-				break;
-			}
-		}
-
-	}
-
-	
+	// Everything that needs to be reset when we loop
+	private LinkedList<IReset> thingsToReset;
 
 	void Awake()
 	{
 		this.recordedFrames = new LinkedList<CombinedInput>();
 		this.gameController = GetComponent<GameControllerScript>();
+		FindThingsToReset();
+	}
+
+	private void FindThingsToReset()
+	{
+		thingsToReset = new LinkedList<IReset>();
+		GameObject[] gameObjects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
+		foreach (GameObject sceneObject in gameObjects)
+		{
+			IReset resetScript = sceneObject as IReset;
+			if (resetScript != null)
+				thingsToReset.AddLast(resetScript);
+		}
 	}
 
 	PlayerColor GetCurrentPlayer()
@@ -130,6 +49,25 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 		{
 			Debug.LogError("Error: Current player is not red, green, or blue!");
 			return PlayerColor.Red;
+		}
+	}
+
+	public void StartRecording()
+	{
+
+	}
+
+	public void StopRecording()
+	{
+
+	}
+
+
+	public void ResetAll()
+	{
+		foreach (IReset resetMe in thingsToReset)
+		{
+			resetMe.Reset ();
 		}
 	}
 

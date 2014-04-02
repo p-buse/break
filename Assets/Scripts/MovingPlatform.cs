@@ -1,35 +1,56 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MovingPlatform : MonoBehaviour,IActivator,IMover {
-
-	public Transform leftOrUpperLimit; //The left or upper limit
-	public Transform rightOrLowerLimit; //The right or lower limit
+public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
+	public Transform leftOrUpperLimit; //The left or upper limit of movement
+	public Transform rightOrLowerLimit; //The right or lower limit of movement
 	public float moveSpeed = 1;
 	public enum Direction {Horizontal, Vertical};
-	public Direction direction;
-	public bool isActive = true; // Whether this platform moves or not
+	public Direction direction; // Vertical or Horizontal
+	public bool isActive = true; // Whether this platform starts out moving or not
 
 	private int currentDirection = 1; //Which way are we currently moving?
+
+	// Used to store how far we go
 	private float leftLimit;
 	private float rightLimit;
 	private float upLimit;
 	private float downLimit;
 
+	// Used for resetting to original position and movement
+	private Vector3 originalPosition;
+	private bool originalIsActive;
 
 
 	void Awake()
 	{
+		// Find our limits of movement
 		leftLimit = leftOrUpperLimit.position.x;
 		rightLimit = rightOrLowerLimit.position.x;
 		upLimit = leftOrUpperLimit.position.y;
 		downLimit = rightOrLowerLimit.position.y;
+
+		// Save originals so we can reset
+		originalPosition = transform.position;
+		originalIsActive = isActive;
+	}
+
+	void FixedUpdate()
+	{
+		transform.Translate (this.Movement());
 	}
 
 	public void Activate()
 	{
 		isActive = !isActive;
 	}
+
+	public void Reset()
+	{
+		this.transform.position = this.originalPosition;
+		this.isActive = this.originalIsActive;
+	}
+
 
 	public Vector3 Movement()
 	{
@@ -45,6 +66,7 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover {
 				
 				return new Vector3 (moveSpeed * currentDirection, 0f, 0f);
 			}
+			// Vertical movement
 			if (direction == Direction.Vertical) {
 				//Too far up
 				if (transform.position.y >= upLimit)
@@ -59,14 +81,12 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover {
 			return Vector3.zero;
 		}
 		else
+			// We're inactive
 		{
 			return Vector3.zero;
 		}
 	}
 
 
-	void FixedUpdate()
-	{
-		transform.Translate (this.Movement());
-	}
+
 }

@@ -17,6 +17,16 @@ public class GameControllerScript : MonoBehaviour {
 		SwitchPlayer();
 	}
 
+	CapturedInput CaptureInput()
+	{
+		// Capture our current input
+		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
+		bool rightKey = (Input.GetAxis ("Horizontal") > 0);
+		bool jumpKey = Input.GetButtonDown ("Jump");
+		bool actionKey = Input.GetButtonDown("Action");
+		return new CapturedInput(leftKey,rightKey,jumpKey,actionKey);
+	}
+
 	void Update () {
 		// Switch players, if pressing the switch button
 		if (Input.GetButton("SwitchPlayer") && Time.time > nextSwitchTime)
@@ -26,14 +36,14 @@ public class GameControllerScript : MonoBehaviour {
 		}
 
 		// Capture our current input
-		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
-		bool rightKey = (Input.GetAxis ("Horizontal") > 0);
-		bool jumpKey = Input.GetButtonDown ("Jump");
-		bool actionKey = Input.GetButtonDown("Action");
-		CapturedInput currentInput = new CapturedInput(leftKey,rightKey,jumpKey,actionKey);
-
+		CapturedInput currentInput = this.CaptureInput();
 		// Send our captured input to the current player
 		currentPlayer.ReceiveInput(currentInput);
+	}
+
+	public void ReceiveInput(CapturedInput capturedInput)
+	{
+
 	}
 
 	void SwitchPlayer()
