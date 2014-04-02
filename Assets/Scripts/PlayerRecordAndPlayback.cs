@@ -31,6 +31,7 @@ public class PlayerRecordAndPlayback : MonoBehaviour {
 		GameObject[] gameObjects = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[];
 		foreach (GameObject sceneObject in gameObjects)
 		{
+
 			IReset resetScript = sceneObject as IReset;
 			if (resetScript != null)
 				thingsToReset.AddLast(resetScript);
