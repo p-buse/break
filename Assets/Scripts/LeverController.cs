@@ -1,19 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LeverController : MonoBehaviour,IActivator
+public class LeverController : MonoBehaviour,IActivator,IReset
 {
 	public Animator animationController;
 	public GameObject activatedObject;
 	private IActivator activateScript;
+	private bool originalState;
 
 	void Awake()
 	{
+		this.originalState = animationController.GetBool ("isOn");
 		activateScript = (IActivator) activatedObject.GetComponent (typeof(IActivator));
 		if (activateScript == null)
 		{
 			Debug.Log ("Warning: Couldn't find IActivator in object " + activatedObject);
 		}
+	}
+
+	public void Reset()
+	{
+		animationController.SetBool("isOn",originalState);
 	}
 
 	/// <summary>
