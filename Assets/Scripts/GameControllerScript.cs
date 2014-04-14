@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using BreakGlobals;
 
 public class GameControllerScript : MonoBehaviour {
 
+	public float switchCooldown = 0.25f;
 	public PlayerController redPlayer;
 	public PlayerController greenPlayer;
 	public PlayerController bluePlayer;
 	private PlayerController currentPlayer;
 
-	private float nextSwitchTime = 0f;
-	private float switchCooldown = 0.25f;
 
+	private float nextSwitchTime = 0f;
+
+	public PlayerRecordAndPlayback looper;
 	
 	void Start () {
 		// Change us to red initially
 		SwitchPlayer();
 	}
 
-	CapturedInput CaptureInput()
+	public CapturedInput CaptureInput()
 	{
 		// Capture our current input
 		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
@@ -35,15 +38,22 @@ public class GameControllerScript : MonoBehaviour {
 			SwitchPlayer ();
 		}
 
+		if (Input.GetButtonDown("Record"))
+		{
+			looper.SwitchState();
+		}
+
 		// Capture our current input
 		CapturedInput currentInput = this.CaptureInput();
 		// Send our captured input to the current player
 		currentPlayer.ReceiveInput(currentInput);
 	}
 
-	public void ReceiveInput(CapturedInput capturedInput)
+	public void ReceiveInputFromLooper(CombinedInput looperInput)
 	{
-
+		redPlayer.ReceiveInput(looperInput.GetPlayerInput(PlayerColor.Red));
+		greenPlayer.ReceiveInput(looperInput.GetPlayerInput(PlayerColor.Green));
+		bluePlayer.ReceiveInput(looperInput.GetPlayerInput(PlayerColor.Blue));
 	}
 
 	void SwitchPlayer()
@@ -68,4 +78,17 @@ public class GameControllerScript : MonoBehaviour {
 	{
 		return this.currentPlayer;
 	}
+
+	public PlayerColor CurrentPlayerColor()
+	{
+		if (currentPlayer == redPlayer)
+			return PlayerColor.Red;
+		if (currentPlayer == greenPlayer)
+			return PlayerColor.Green;
+		if (currentPlayer == bluePlayer)
+			return PlayerColor.Blue;
+		Debug.LogError("Current player is not the red, green, or blue player!");
+		return PlayerColor.Red;
+	}
+
 }

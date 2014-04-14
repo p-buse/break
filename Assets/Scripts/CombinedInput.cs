@@ -13,6 +13,11 @@ public class CombinedInput
 		greenInput = null;
 		blueInput = null;
 	}
+
+	public CombinedInput(PlayerColor playerColor, CapturedInput capturedInput)
+	{
+		this.AddPlayerInput(playerColor, capturedInput);
+	}
 	
 	
 	/// <summary>
@@ -75,23 +80,19 @@ public class CombinedInput
 				return redInput;
 			else
 				return new CapturedInput();
-			break;
 		case PlayerColor.Green:
 			if (greenInput != null)
 				return greenInput;
 			else
 				return new CapturedInput();
-			break;
 		case PlayerColor.Blue:
 			if (blueInput != null)
 				return blueInput;
 			else
 				return new CapturedInput();
-			break;
 		default:
 			Debug.LogError ("Invalid player color for GetPlayerInput!");
 			return new CapturedInput();
-			break;
 		}
 	}
 	

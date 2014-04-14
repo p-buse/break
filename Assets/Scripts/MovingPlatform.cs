@@ -19,6 +19,7 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 
 	// Used for resetting to original position and movement
 	private Vector3 originalPosition;
+	private int originalDirection;
 	private bool originalIsActive;
 
 
@@ -33,6 +34,7 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 		// Save originals so we can reset
 		originalPosition = transform.position;
 		originalIsActive = isActive;
+		originalDirection = currentDirection;
 	}
 
 	void FixedUpdate()
@@ -49,6 +51,7 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 	{
 		this.transform.position = this.originalPosition;
 		this.isActive = this.originalIsActive;
+		this.currentDirection = this.originalDirection;
 	}
 
 
