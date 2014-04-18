@@ -1394,6 +1394,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 797193015}
   - 212: {fileID: 797193014}
+  - 50: {fileID: 797193016}
   - 61: {fileID: 797193013}
   - 114: {fileID: 797193012}
   m_Layer: 8
@@ -1417,7 +1418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftOrUpperLimit: {fileID: 393358328}
   rightOrLowerLimit: {fileID: 2136984539}
-  moveSpeed: .100000001
+  moveSpeed: 3
   direction: 0
   isActive: 1
 --- !u!61 &797193013
@@ -1469,6 +1470,22 @@ Transform:
   - {fileID: 393358328}
   - {fileID: 2136984539}
   m_Father: {fileID: 2083826213}
+--- !u!50 &797193016
+Rigidbody2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 5000000, guid: 917234c2b20bf4d73981719c1f17d073,
+    type: 2}
+  m_PrefabInternal: {fileID: 2002586449}
+  m_GameObject: {fileID: 797193011}
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: .0500000007
+  m_GravityScale: 0
+  m_FixedAngle: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
 --- !u!1 &804637089
 GameObject:
   m_ObjectHideFlags: 0
@@ -1542,6 +1559,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 846508743}
   - 212: {fileID: 846508746}
+  - 50: {fileID: 846508747}
   - 61: {fileID: 846508745}
   - 114: {fileID: 846508744}
   m_Layer: 8
@@ -1578,7 +1596,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftOrUpperLimit: {fileID: 1212199887}
   rightOrLowerLimit: {fileID: 456885365}
-  moveSpeed: .100000001
+  moveSpeed: 3
   direction: 1
   isActive: 1
 --- !u!61 &846508745
@@ -1617,6 +1635,22 @@ SpriteRenderer:
   m_SortingLayerID: 762945009
   m_Sprite: {fileID: 21300000, guid: 7ea8eb3521668e5458bf1b0de75d798b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!50 &846508747
+Rigidbody2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 5000000, guid: 917234c2b20bf4d73981719c1f17d073,
+    type: 2}
+  m_PrefabInternal: {fileID: 1760756777}
+  m_GameObject: {fileID: 846508742}
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: .0500000007
+  m_GravityScale: 0
+  m_FixedAngle: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
 --- !u!1001 &863903955
 Prefab:
   m_ObjectHideFlags: 0
@@ -2134,7 +2168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 1600
-  moveSpeed: 1.5
+  moveSpeed: 2
   playerName: Green
 --- !u!50 &1206333185
 Rigidbody2D:
@@ -2639,7 +2673,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400002, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
       propertyPath: moveSpeed
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
@@ -2812,6 +2846,22 @@ Prefab:
     - target: {fileID: 400002, guid: 917234c2b20bf4d73981719c1f17d073, type: 2}
       propertyPath: m_LocalPosition.x
       value: -1.29779148
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 917234c2b20bf4d73981719c1f17d073, type: 2}
+      propertyPath: moveSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5000000, guid: 917234c2b20bf4d73981719c1f17d073, type: 2}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5000000, guid: 917234c2b20bf4d73981719c1f17d073, type: 2}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5000000, guid: 917234c2b20bf4d73981719c1f17d073, type: 2}
+      propertyPath: m_FixedAngle
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 917234c2b20bf4d73981719c1f17d073, type: 2}
@@ -3480,6 +3530,18 @@ Prefab:
       propertyPath: m_LocalPosition.y
       value: -.648974419
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 917234c2b20bf4d73981719c1f17d073, type: 2}
+      propertyPath: moveSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5000000, guid: 917234c2b20bf4d73981719c1f17d073, type: 2}
+      propertyPath: m_IsKinematic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5000000, guid: 917234c2b20bf4d73981719c1f17d073, type: 2}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 917234c2b20bf4d73981719c1f17d073, type: 2}
   m_RootGameObject: {fileID: 797193011}
@@ -3593,8 +3655,8 @@ Transform:
   - {fileID: 1821833312}
   - {fileID: 1818527328}
   - {fileID: 2137602253}
-  - {fileID: 846508743}
   - {fileID: 797193015}
+  - {fileID: 846508743}
   - {fileID: 1772323148}
   - {fileID: 995630194}
   - {fileID: 206501720}

@@ -8,6 +8,7 @@ public class CapturedInput {
 
 	private BitArray inputArray;
 	enum Buttons {Left=0, Right=1, Jump=2, Action=3};
+	private bool empty;
 
 	/// <summary>
 	/// Initializes an CapturedInput with left, right, jump, and action keys.
@@ -23,6 +24,12 @@ public class CapturedInput {
 		inputArray.Set (1,rightKey);
 		inputArray.Set(2,jumpKey);
 		inputArray.Set(3,actionKey);
+		if ((leftKey || rightKey || jumpKey || actionKey) == false)
+		{
+			this.empty = true;
+		}
+		else
+			this.empty = false;
 	}
 
 	/// <summary>
@@ -31,6 +38,7 @@ public class CapturedInput {
 	public CapturedInput()
 	{
 		inputArray = new BitArray(4);
+		this.empty = true;
 	}
 
 	public bool getLeft()
@@ -51,6 +59,11 @@ public class CapturedInput {
 	public bool getAction()
 	{
 		return inputArray.Get(3);
+	}
+
+	public bool isEmpty()
+	{
+		return this.empty;
 	}
 
 }

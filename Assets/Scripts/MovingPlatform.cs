@@ -39,7 +39,7 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 
 	void FixedUpdate()
 	{
-		transform.Translate (this.Movement());
+		rigidbody2D.velocity = (this.Movement());
 	}
 
 	public void Activate()

@@ -7,19 +7,34 @@ public class PlayerController : MonoBehaviour,IReset {
 	public string playerName; // Our player's name
 	private Color playerColor; // Our player's color (set in the Sprite)
 
+	private GameControllerScript gameController;
 	private GroundCheck groundCheck; // Ground check script
 	private bool jump; // Are we jumping?
-	private float horizontalMovement = 0f; // Holds our current horizontal movement.
 	private Vector3 originalPosition;
+	/// <summary>
+	/// The most recent button presses sent to the player
+	/// </summary>
+	private CapturedInput currentInput;
+
+	/// <summary>
+	/// Array for storing recorded input of this character
+	/// </summary>
+	private CapturedInput[] recordedInput;
 
 	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
 	
 	void Awake()
 	{
-		groundCheck = transform.Find("Ground Check").GetComponent<GroundCheck>();
-		activatorsList = new Hashtable();
+		// Find our game controller
+		this.gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerScript>();
+		int levelCompletionTime = gameController.levelCompletionTime;
+		// Allocate enough space in the array for recorded input
+		this.recordedInput = new CapturedInput[levelCompletionTime];
+		this.groundCheck = transform.Find("Ground Check").GetComponent<GroundCheck>();
 		this.playerColor = GetComponent<SpriteRenderer>().color;
 		this.originalPosition = transform.position;
+		this.currentInput = new CapturedInput();
+		this.activatorsList = new Hashtable();
 	}
 
 	void OnLevelWasLoaded()
@@ -59,59 +74,84 @@ public class PlayerController : MonoBehaviour,IReset {
 
 	void FixedUpdate()
 	{
-		// Set the velocity to negative or positive of our movespeed
-		rigidbody2D.velocity = new Vector2(this.horizontalMovement * this.moveSpeed, rigidbody2D.velocity.y);
-		
-		if (this.jump)
+		int currentPositionInLoop = gameController.GetCurrentPositionInLoop();
+		if (this.currentInput.isEmpty())
 		{
-			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-			this.jump = false;
+			if (recordedInput[currentPositionInLoop] != null)
+			{
+				// If we have no input from the player AND we have recorded stuff, use that!
+				this.ActUsingInput((CapturedInput)recordedInput[currentPositionInLoop]);
+			}
 		}
-		// If we're on a mover
-		if (groundCheck.IsOnMover())
+		else
 		{
-			transform.Translate(groundCheck.GetMovement());
+			recordedInput[currentPositionInLoop] = currentInput;
+			this.ActUsingInput(currentInput);
 		}
-		
+//		ActUsingInput(currentInput);
 	}
-
-	/*
-	 ************** PUBLIC METHODS ***************
-	 */
 
 	public Color GetPlayerColor()
 	{
 		return this.playerColor;
 	}
 
-	public void ReceiveInput(CapturedInput capturedInput)
+//	public void SetInput(CapturedInput capturedInput)
+//	{
+//		// Process horizontal movement
+//		if (capturedInput.getLeft ())
+//		{
+//			this.horizontalMovement = -moveSpeed;
+//		}
+//		else if (capturedInput.getRight())
+//		{
+//			this.horizontalMovement = moveSpeed;
+//		}
+//		else
+//			this.horizontalMovement = 0f;
+//
+//		// Process whether we're jumping
+//		if (capturedInput.getJump() && groundCheck.IsGrounded())
+//			this.jump = true;
+//
+//		// Process whether we're activating
+//		if (capturedInput.getAction())
+//		{
+//			foreach (IActivator activator in activatorsList.Values)
+//				activator.Activate();
+//		}
+//	}
+
+	private void ActUsingInput(CapturedInput theInput)
 	{
 		// Process horizontal movement
-		if (capturedInput.getLeft ())
-		{
-			this.horizontalMovement = -moveSpeed;
-		}
-		else if (capturedInput.getRight())
-		{
-			this.horizontalMovement = moveSpeed;
-		}
-		else
-			this.horizontalMovement = 0f;
+		float horizontalMovement = 0f;
+		if (theInput.getLeft ())
+			horizontalMovement = -moveSpeed;
+		else if (theInput.getRight())
+			horizontalMovement = moveSpeed;
+		horizontalMovement *= moveSpeed;
+		rigidbody2D.velocity = new Vector2(horizontalMovement,rigidbody2D.velocity.y);
+		// Process jumping
+		if (theInput.getJump() && groundCheck.IsGrounded())
+			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
 
-		// Process whether we're jumping
-		if (capturedInput.getJump() && groundCheck.IsGrounded())
-			this.jump = true;
-
-		// Process whether we're activating
-		if (capturedInput.getAction())
+		// Process activating
+		if (theInput.getAction())
 		{
 			foreach (IActivator activator in activatorsList.Values)
 				activator.Activate();
 		}
 	}
 
+	public void SetInput(CapturedInput capturedInput)
+	{
+		this.currentInput = capturedInput;
+	}
+
 	public void Reset()
 	{
 		this.transform.position = this.originalPosition;
+		activatorsList = new Hashtable(); // Clear the activators list
 	}
 }
