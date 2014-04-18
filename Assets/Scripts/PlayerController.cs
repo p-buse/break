@@ -22,7 +22,10 @@ public class PlayerController : MonoBehaviour,IReset {
 	private CapturedInput[] recordedInput;
 
 	private Hashtable activatorsList; // Mechanical things you are touching. Key: Instance ID of the thing. Value: The Activator
-	
+	/// <summary>
+	/// If true, will overwrite loop with emptiness as it goes.
+	/// </summary>
+	private bool overwriteLoop;
 	void Awake()
 	{
 		// Find our game controller
@@ -35,6 +38,7 @@ public class PlayerController : MonoBehaviour,IReset {
 		this.originalPosition = transform.position;
 		this.currentInput = new CapturedInput();
 		this.activatorsList = new Hashtable();
+		this.overwriteLoop = false;
 	}
 
 	void OnLevelWasLoaded()
@@ -75,52 +79,45 @@ public class PlayerController : MonoBehaviour,IReset {
 	void FixedUpdate()
 	{
 		int currentPositionInLoop = gameController.GetCurrentPositionInLoop();
+		// Our player has not pressed anything
 		if (this.currentInput.isEmpty())
 		{
-			if (recordedInput[currentPositionInLoop] != null)
+
+			if (this.overwriteLoop)
 			{
-				// If we have no input from the player AND we have recorded stuff, use that!
-				this.ActUsingInput((CapturedInput)recordedInput[currentPositionInLoop]);
+				// If we're overwriting, record a "no-op" and do nothing
+				recordedInput[currentPositionInLoop] = currentInput;
+				this.ActUsingInput(currentInput);
 			}
+			else
+			{
+
+				if (recordedInput[currentPositionInLoop] != null)
+				{
+					// If we have no input from the player AND we have recorded stuff, use that!
+					this.ActUsingInput((CapturedInput)recordedInput[currentPositionInLoop]);
+				}
+				else
+				{
+					// If we have no input from the player and don't have recorded stuff, stop movement.
+					this.ActUsingInput(currentInput);
+				}
+			}
+
 		}
+		// Our player has pressed something
 		else
 		{
 			recordedInput[currentPositionInLoop] = currentInput;
 			this.ActUsingInput(currentInput);
+			this.overwriteLoop = true;
 		}
-//		ActUsingInput(currentInput);
 	}
 
 	public Color GetPlayerColor()
 	{
 		return this.playerColor;
 	}
-
-//	public void SetInput(CapturedInput capturedInput)
-//	{
-//		// Process horizontal movement
-//		if (capturedInput.getLeft ())
-//		{
-//			this.horizontalMovement = -moveSpeed;
-//		}
-//		else if (capturedInput.getRight())
-//		{
-//			this.horizontalMovement = moveSpeed;
-//		}
-//		else
-//			this.horizontalMovement = 0f;
-//
-//		// Process whether we're jumping
-//		if (capturedInput.getJump() && groundCheck.IsGrounded())
-//			this.jump = true;
-//
-//		// Process whether we're activating
-//		if (capturedInput.getAction())
-//		{
-//			foreach (IActivator activator in activatorsList.Values)
-//				activator.Activate();
-//		}
-//	}
 
 	private void ActUsingInput(CapturedInput theInput)
 	{
@@ -152,6 +149,8 @@ public class PlayerController : MonoBehaviour,IReset {
 	public void Reset()
 	{
 		this.transform.position = this.originalPosition;
-		activatorsList = new Hashtable(); // Clear the activators list
+		this.rigidbody2D.velocity = new Vector2();
+		this.activatorsList = new Hashtable(); // Clear the activators list
+		this.overwriteLoop = false;
 	}
 }

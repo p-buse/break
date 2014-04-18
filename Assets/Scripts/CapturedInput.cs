@@ -66,4 +66,10 @@ public class CapturedInput {
 		return this.empty;
 	}
 
+	public override string ToString()
+	{
+		return string.Format("Left: {0}\nRight: {1}\nJump: {2}\nAct: {3}\nisEmpty? {4}",
+		                     getLeft(),getRight(),getJump(),getAction(),isEmpty());
+	}
+
 }

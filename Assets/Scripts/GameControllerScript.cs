@@ -22,16 +22,91 @@ public class GameControllerScript : MonoBehaviour {
 
 	private float nextSwitchTime = 0f;
 
+	void Start () {
+		// Change us to red initially
+		currentPlayer = redPlayer;
+		this.resetList = new LinkedList<IReset>();
+		this.FindThingsToReset();
+	}
+
+	void FixedUpdate()
+	{
+		this.timeElapsedInLoop += 1;
+		if (timeElapsedInLoop >= levelCompletionTime)
+		{
+			timeElapsedInLoop = 0;
+			this.ResetEverything ();
+		}
+		
+	}
+	
+	void Update () {
+		// Switch players, if pressing the switch button
+		if (Input.GetButton("SwitchPlayer") && Time.time > nextSwitchTime)
+		{
+			nextSwitchTime = Time.time + this.switchCooldown;
+			SwitchPlayer ();
+		}
+		
+		// Capture our current input
+		CapturedInput currentInput = this.GetCurrentInput();
+		// Send input to current player
+		currentPlayer.SetInput(currentInput);
+		
+	}
+
+	void OnGUI()
+	{
+		
+		GUI.Box (new Rect(100,0,100,50),Mathf.FloorToInt((levelCompletionTime-timeElapsedInLoop) * Time.fixedDeltaTime).ToString());		
+		guiText.text = "Player: " + currentPlayer.playerName;
+		guiText.color = currentPlayer.GetPlayerColor();
+	}
+
+	public CapturedInput GetCurrentInput()
+	{
+		// Capture our current input
+		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
+		bool rightKey = (Input.GetAxis ("Horizontal") > 0);
+		bool jumpKey = Input.GetButtonDown ("Jump");
+		bool actionKey = Input.GetButtonDown("Action");
+		return new CapturedInput(leftKey,rightKey,jumpKey,actionKey);
+	}
+
+	public PlayerController CurrentPlayer()
+	{
+		return this.currentPlayer;
+	}
+
+	public int GetCurrentPositionInLoop()
+	{
+		return this.timeElapsedInLoop;
+	}
+
+	private void SwitchPlayer()
+	{
+		
+		// Stop movement of previous player
+		if (currentPlayer != null)
+			currentPlayer.SetInput(new CapturedInput());
+
+		// Cycle through the three different players
+		if (currentPlayer == redPlayer)
+			currentPlayer = greenPlayer;
+		else if (currentPlayer == greenPlayer)
+			currentPlayer = bluePlayer;
+		else
+			currentPlayer = redPlayer;
+	}
 
 	private void ResetEverything()
 	{
-		print ("resetting!");
 		foreach (IReset resetScript in this.resetList)
 		{
 			resetScript.Reset ();
 		}
 	}
-
+	
 	private void FindThingsToReset()
 	{
 		LinkedList<GameObject> sceneObjects = this.getActiveObjects();
@@ -61,105 +136,5 @@ public class GameControllerScript : MonoBehaviour {
 	}
 
 
-	void Start () {
-		// Change us to red initially
-		SwitchPlayer();
-		this.resetList = new LinkedList<IReset>();
-		this.FindThingsToReset();
-	}
 
-	public CapturedInput GetCurrentInput()
-	{
-		// Capture our current input
-		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
-		bool rightKey = (Input.GetAxis ("Horizontal") > 0);
-		bool jumpKey = Input.GetButtonDown ("Jump");
-		bool actionKey = Input.GetButtonDown("Action");
-		return new CapturedInput(leftKey,rightKey,jumpKey,actionKey);
-	}
-
-	void FixedUpdate()
-	{
-		this.timeElapsedInLoop += 1;
-		if (timeElapsedInLoop >= levelCompletionTime)
-		{
-			timeElapsedInLoop = 0;
-			this.ResetEverything ();
-		}
-
-	}
-
-	void Update () {
-		// Switch players, if pressing the switch button
-		if (Input.GetButton("SwitchPlayer") && Time.time > nextSwitchTime)
-		{
-			nextSwitchTime = Time.time + this.switchCooldown;
-			SwitchPlayer ();
-		}
-
-		// Capture our current input
-		CapturedInput currentInput = this.GetCurrentInput();
-		// Send input to current player
-		currentPlayer.SetInput(currentInput);
-
-	}
-
-
-//	public void ReceiveInputFromLooper(CombinedInput looperInput)
-//	{
-//		redPlayer.ReceiveInput(looperInput.GetPlayerInput(PlayerColor.Red));
-//		greenPlayer.ReceiveInput(looperInput.GetPlayerInput(PlayerColor.Green));
-//		bluePlayer.ReceiveInput(looperInput.GetPlayerInput(PlayerColor.Blue));
-//	}
-
-	void SwitchPlayer()
-	{
-
-		// Stop movement of current player
-		if (currentPlayer != null)
-			currentPlayer.SetInput(new CapturedInput());
-		// Cycle through the three different players
-		if (currentPlayer == redPlayer)
-			currentPlayer = greenPlayer;
-		else if (currentPlayer == greenPlayer)
-			currentPlayer = bluePlayer;
-		else
-			currentPlayer = redPlayer;
-
-		// Start as the red player
-		if (currentPlayer == null)
-			currentPlayer = redPlayer;
-
-		guiText.text = "Player: " + currentPlayer.playerName;
-		guiText.color = currentPlayer.GetPlayerColor();
-	}
-
-	public PlayerController CurrentPlayer()
-	{
-		return this.currentPlayer;
-	}
-
-	public PlayerColor CurrentPlayerColor()
-	{
-		if (currentPlayer == redPlayer)
-			return PlayerColor.Red;
-		if (currentPlayer == greenPlayer)
-			return PlayerColor.Green;
-		if (currentPlayer == bluePlayer)
-			return PlayerColor.Blue;
-		Debug.LogError("Current player is not the red, green, or blue player!");
-		return PlayerColor.Red;
-	}
-
-	public int GetCurrentPositionInLoop()
-	{
-		return this.timeElapsedInLoop;
-	}
-
-	void OnGUI()
-	{
-
-		GUI.Box (new Rect(100,0,100,50),Mathf.FloorToInt((levelCompletionTime-timeElapsedInLoop) * Time.fixedDeltaTime).ToString());		
-		
-	}
 }

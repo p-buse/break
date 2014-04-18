@@ -84,7 +84,7 @@ GameObject:
   - 4: {fileID: 165485275}
   - 58: {fileID: 165485277}
   - 114: {fileID: 165485276}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Ground Check
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ GameObject:
   - 4: {fileID: 351872713}
   - 58: {fileID: 351872715}
   - 114: {fileID: 351872714}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Ground Check
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -381,6 +381,14 @@ Prefab:
     - target: {fileID: 11400002, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf, type: 2}
       propertyPath: moveSpeed
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf, type: 2}
+      propertyPath: m_Layer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf, type: 2}
+      propertyPath: m_Layer
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf, type: 2}
@@ -697,7 +705,7 @@ GameObject:
   - 114: {fileID: 1206333184}
   - 212: {fileID: 1206333183}
   - 61: {fileID: 1206333182}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Green Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -793,7 +801,6 @@ GameObject:
   - 4: {fileID: 1270211602}
   - 132: {fileID: 1270211604}
   - 114: {fileID: 1270211603}
-  - 114: {fileID: 1270211605}
   - 114: {fileID: 1270211606}
   m_Layer: 0
   m_Name: Game Controller
@@ -847,20 +854,6 @@ GUIText:
     rgba: 4294967295
   m_PixelCorrect: 1
   m_RichText: 1
---- !u!114 &1270211605
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1270211601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d4d0e5922ae4e543bdfdec0381f5de3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recordSymbol: {fileID: 2800000, guid: c7909182abdcca94ab0ac809edbfbc61, type: 3}
-  playSymbol: {fileID: 2800000, guid: c217d137e0ff7504b8b2fbbbe49465d1, type: 3}
-  gameController: {fileID: 1270211606}
 --- !u!114 &1270211606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -876,8 +869,7 @@ MonoBehaviour:
   redPlayer: {fileID: 1897217157}
   greenPlayer: {fileID: 1206333184}
   bluePlayer: {fileID: 1610115970}
-  levelCompletionTime: 100
-  looper: {fileID: 1270211605}
+  levelCompletionTime: 250
 --- !u!1 &1610115966
 GameObject:
   m_ObjectHideFlags: 0
@@ -890,7 +882,7 @@ GameObject:
   - 114: {fileID: 1610115970}
   - 212: {fileID: 1610115969}
   - 61: {fileID: 1610115968}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Blue Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1015,6 +1007,18 @@ Prefab:
       propertyPath: moveSpeed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 21200000, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
+      propertyPath: m_Layer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
+      propertyPath: m_Layer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
   m_RootGameObject: {fileID: 1206333180}
@@ -1063,6 +1067,14 @@ Prefab:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 6200000, guid: c0366ea6fb6a04745b9d3a29f8510fa9, type: 2}
+    - target: {fileID: 100000, guid: 13e0c79340d9e4beba4c6e40877ce59c, type: 2}
+      propertyPath: m_Layer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 13e0c79340d9e4beba4c6e40877ce59c, type: 2}
+      propertyPath: m_Layer
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13e0c79340d9e4beba4c6e40877ce59c, type: 2}
   m_RootGameObject: {fileID: 1897217150}
@@ -1252,7 +1264,7 @@ GameObject:
   - 114: {fileID: 1897217157}
   - 212: {fileID: 1897217153}
   - 61: {fileID: 1897217152}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Red Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1348,7 +1360,7 @@ GameObject:
   - 4: {fileID: 1928018689}
   - 58: {fileID: 1928018688}
   - 114: {fileID: 1928018687}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Ground Check
   m_TagString: Player
   m_Icon: {fileID: 0}

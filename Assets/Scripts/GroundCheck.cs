@@ -15,7 +15,7 @@ public class GroundCheck : MonoBehaviour {
 		this.groundLayer = 1 << LayerMask.NameToLayer("Ground");
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		Vector3 bottomOfCollider = transform.position - new Vector3(0f, circleColliderRadius + distanceDownToCheck, 0f);
 		// Cast a line and check if it collides with ground
