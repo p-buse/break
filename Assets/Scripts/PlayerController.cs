@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour,IReset {
 		int levelCompletionTime = gameController.levelCompletionTime;
 		// Allocate enough space in the array for recorded input
 		this.recordedInput = new CapturedInput[levelCompletionTime];
-		this.groundCheck = (GroundCheck)GetComponent("GroundCheck");
+		this.groundCheck = GetComponent<GroundCheck>();
 		this.playerColor = GetComponent<SpriteRenderer>().color;
 		this.originalPosition = transform.position;
 		this.currentInput = new CapturedInput();
@@ -48,6 +48,12 @@ public class PlayerController : MonoBehaviour,IReset {
 
 	void OnTriggerEnter2D(Collider2D collider)
 	{
+
+		if (collider.gameObject.name.Equals("Exit Door"))
+		{
+			gameController.GetComponent<AdvanceLevel>().SetComplete(playerName, true);
+			gameObject.SetActive(false);
+		}
 		if (collider.gameObject.tag.Equals ( "Mechanical"))
 		{
 			// Check whether this contains an activator component
@@ -148,6 +154,7 @@ public class PlayerController : MonoBehaviour,IReset {
 
 	public void Reset()
 	{
+		gameObject.SetActive(true);
 		this.transform.position = this.originalPosition;
 		this.rigidbody2D.velocity = new Vector2();
 		this.activatorsList = new Hashtable(); // Clear the activators list
