@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour,IReset {
 		int levelCompletionTime = gameController.levelCompletionTime;
 		// Allocate enough space in the array for recorded input
 		this.recordedInput = new CapturedInput[levelCompletionTime];
-		this.groundCheck = transform.Find("Ground Check").GetComponent<GroundCheck>();
+		this.groundCheck = (GroundCheck)GetComponent("GroundCheck");
 		this.playerColor = GetComponent<SpriteRenderer>().color;
 		this.originalPosition = transform.position;
 		this.currentInput = new CapturedInput();

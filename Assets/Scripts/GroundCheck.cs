@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GroundCheck : MonoBehaviour {
 	public float distanceDownToCheck; // The distance below to check for ground
-	private float circleColliderRadius;
+	private float distanceToBottom;
 	private bool grounded;
 	private int groundLayer;
 
@@ -11,13 +11,15 @@ public class GroundCheck : MonoBehaviour {
 
 	void Awake()
 	{
-		this.circleColliderRadius = GetComponent<CircleCollider2D>().radius;
+		BoxCollider2D boxCol = GetComponent<BoxCollider2D>();
+		this.distanceToBottom = Mathf.Abs (boxCol.center.y - boxCol.size.y / 2);
 		this.groundLayer = 1 << LayerMask.NameToLayer("Ground");
 	}
 
 	void FixedUpdate()
 	{
-		Vector3 bottomOfCollider = transform.position - new Vector3(0f, circleColliderRadius + distanceDownToCheck, 0f);
+		Vector3 bottomOfCollider = transform.position - new Vector3(0f, distanceToBottom + distanceDownToCheck, 0f);
+		Debug.DrawLine(transform.position, bottomOfCollider);
 		// Cast a line and check if it collides with ground
 		int numGround = Physics2D.LinecastNonAlloc (transform.position, bottomOfCollider, theGround, groundLayer);
 		// If we collided with > 0 "Ground" objects, then we're grounded!
