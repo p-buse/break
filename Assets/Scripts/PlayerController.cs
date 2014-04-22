@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour,IReset {
 	{
 		// Find our game controller
 		this.gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerScript>();
-		int levelCompletionTime = gameController.levelCompletionTime;
+		int levelCompletionTime = GameObject.FindGameObjectWithTag("LevelStats").GetComponent<LevelStats>().levelCompletionTime;
 		// Allocate enough space in the array for recorded input
 		this.recordedInput = new CapturedInput[levelCompletionTime];
 		this.groundCheck = GetComponent<GroundCheck>();

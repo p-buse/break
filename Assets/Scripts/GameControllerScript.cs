@@ -6,14 +6,14 @@ using BreakGlobals;
 public class GameControllerScript : MonoBehaviour {
 
 	public float switchCooldown = 0.25f;
-	public PlayerController redPlayer;
-	public PlayerController greenPlayer;
-	public PlayerController bluePlayer;
+	private PlayerController redPlayer;
+	private PlayerController greenPlayer;
+	private PlayerController bluePlayer;
 	private PlayerController currentPlayer;
 	/// <summary>
 	/// The level completion time, measured in 50ths of a second (timescale = 0.02)
 	/// </summary>
-	public int levelCompletionTime;
+	private int levelCompletionTime;
 	private int timeElapsedInLoop = 0;
 	/// <summary>
 	/// List of objects to reset when the loop completes
@@ -22,11 +22,47 @@ public class GameControllerScript : MonoBehaviour {
 
 	private float nextSwitchTime = 0f;
 
-	void Start () {
+	void Awake () {
+		SetLoopTime();
+		FindPlayersInScene();
 		// Change us to red initially
 		currentPlayer = redPlayer;
-		this.resetList = new LinkedList<IReset>();
 		this.FindThingsToReset();
+
+
+	}
+
+	private void SetLoopTime()
+	{
+		this.levelCompletionTime = GameObject.FindGameObjectWithTag("LevelStats").GetComponent<LevelStats>().levelCompletionTime;
+	}
+
+	private void FindPlayersInScene()
+	{
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+		foreach (GameObject currentPlayer in players)
+		{
+			if (currentPlayer.name.Equals("Red Player"))
+				this.redPlayer = currentPlayer.GetComponent<PlayerController>();
+			if (currentPlayer.name.Equals("Green Player"))
+				this.greenPlayer = currentPlayer.GetComponent<PlayerController>();
+			if (currentPlayer.name.Equals("Blue Player"))
+				this.bluePlayer = currentPlayer.GetComponent<PlayerController>();
+		}
+		if (redPlayer == null || greenPlayer == null || bluePlayer == null)
+		{
+			Debug.LogError("Not all players detected in scene!");
+		}
+	}
+
+	void OnLevelWasLoaded()
+	{
+		// Set the level's time to complete
+		SetLoopTime();
+		// Reset the resetlist
+		FindThingsToReset();
+		FindPlayersInScene();
+		currentPlayer = redPlayer;
 	}
 
 	void FixedUpdate()
@@ -68,7 +104,7 @@ public class GameControllerScript : MonoBehaviour {
 		// Capture our current input
 		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
 		bool rightKey = (Input.GetAxis ("Horizontal") > 0);
-		bool jumpKey = Input.GetButtonDown ("Jump");
+		bool jumpKey = Input.GetButton ("Jump");
 		bool actionKey = Input.GetButtonDown("Action");
 		return new CapturedInput(leftKey,rightKey,jumpKey,actionKey);
 	}
@@ -109,6 +145,7 @@ public class GameControllerScript : MonoBehaviour {
 	
 	private void FindThingsToReset()
 	{
+		this.resetList = new LinkedList<IReset>();
 		LinkedList<GameObject> sceneObjects = this.getActiveObjects();
 		foreach (GameObject currentObject in sceneObjects)
 		{

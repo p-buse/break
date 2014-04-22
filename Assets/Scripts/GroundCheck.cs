@@ -20,7 +20,7 @@ public class GroundCheck : MonoBehaviour {
 		this.rightOfColliderX = boxCol.center.x + boxCol.size.x / 2;
 		this.distanceToBottom = Mathf.Abs (boxCol.center.y - boxCol.size.y / 2);
 
-		this.groundAndDefaultLayerMask = 1 << LayerMask.NameToLayer("Ground") |
+		this.groundAndDefaultLayerMask = 1 << LayerMask.NameToLayer("Ground") | 
 			1 << LayerMask.NameToLayer("Default");
 	}
 
@@ -30,7 +30,7 @@ public class GroundCheck : MonoBehaviour {
 		Vector3 bottomRight = transform.position + new Vector3(rightOfColliderX, bottomOfColliderY - distanceDownToCheck, 0f);
 		Debug.DrawLine(bottomLeft, bottomRight);
 		// Cast a line and check if it collides with ground
-		int numGround = Physics2D.LinecastNonAlloc (bottomLeft, bottomRight, theGround);
+		int numGround = Physics2D.LinecastNonAlloc (bottomLeft, bottomRight, theGround,	groundAndDefaultLayerMask);
 		// If we collided with > 0 "Ground" objects, then we're grounded!
 		this.grounded = (numGround > 0);
 

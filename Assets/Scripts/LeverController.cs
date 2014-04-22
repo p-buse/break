@@ -4,17 +4,22 @@ using System.Collections;
 public class LeverController : MonoBehaviour,IActivator,IReset
 {
 	public Animator animationController;
-	public GameObject activatedObject;
-	private IActivator activateScript;
+	public GameObject[] activatedObjects;
+	private IActivator[] activateScripts;
 	private bool originalState;
 
 	void Awake()
 	{
 		this.originalState = animationController.GetBool ("isOn");
-		activateScript = (IActivator) activatedObject.GetComponent (typeof(IActivator));
-		if (activateScript == null)
+		activateScripts = new IActivator[activatedObjects.Length];
+
+		for (int i = 0; i < activatedObjects.Length; i++)
 		{
-			Debug.Log ("Warning: Couldn't find IActivator in object " + activatedObject);
+			activateScripts[i] = (IActivator) activatedObjects[i].GetComponent (typeof(IActivator));
+			if (activateScripts[i] == null)
+			{
+				Debug.Log ("Warning: Couldn't find IActivator in object " + activatedObjects);
+			}
 		}
 	}
 
@@ -31,7 +36,11 @@ public class LeverController : MonoBehaviour,IActivator,IReset
 		bool leverIsOn = animationController.GetBool("isOn");
 		leverIsOn = !leverIsOn;
 		animationController.SetBool("isOn",leverIsOn);
-		activateScript.Activate();
+		foreach (IActivator activateScript in activateScripts)
+		{
+			activateScript.Activate();
+		}
+
 	}
 
 }
