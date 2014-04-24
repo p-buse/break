@@ -665,6 +665,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf, type: 2}
+      propertyPath: activateCooldown
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf, type: 2}
   m_RootGameObject: {fileID: 1610115966}
@@ -1010,6 +1014,10 @@ Prefab:
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
+      propertyPath: activateCooldown
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fffa42e18b9854a6489fdf17ff1c57d1, type: 2}
   m_RootGameObject: {fileID: 1206333180}
@@ -1089,6 +1097,10 @@ Prefab:
     - target: {fileID: 400002, guid: 13e0c79340d9e4beba4c6e40877ce59c, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 13e0c79340d9e4beba4c6e40877ce59c, type: 2}
+      propertyPath: activateCooldown
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 13e0c79340d9e4beba4c6e40877ce59c, type: 2}
@@ -1177,6 +1189,7 @@ MonoBehaviour:
   jumpForce: 1200
   moveSpeed: 2
   playerName: Green
+  activateCooldown: 10
 --- !u!50 &1206333185
 Rigidbody2D:
   m_ObjectHideFlags: 0
@@ -1535,6 +1548,7 @@ MonoBehaviour:
   jumpForce: 800
   moveSpeed: 3.5
   playerName: Blue
+  activateCooldown: 10
 --- !u!50 &1610115971
 Rigidbody2D:
   m_ObjectHideFlags: 0
@@ -1991,6 +2005,7 @@ MonoBehaviour:
   jumpForce: 1000
   moveSpeed: 2.5
   playerName: Red
+  activateCooldown: 10
 --- !u!50 &1897217158
 Rigidbody2D:
   m_ObjectHideFlags: 0

@@ -6,7 +6,8 @@ public class PlayerController : MonoBehaviour,IReset {
 	public float moveSpeed; // Our horizontal movement speed
 	public string playerName; // Our player's name
 	private Color playerColor; // Our player's color (set in the Sprite)
-
+	public int activateCooldown = 10; // How long between activations (in 50ths of a second)
+	private int activateTimer; // Timer for activations
 	private GameControllerScript gameController;
 	private GroundCheck groundCheck; // Ground check script
 	private bool jump; // Are we jumping?
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour,IReset {
 	private bool overwriteLoop;
 	void Awake()
 	{
+		// Set our activate cooldown
+		this.activateTimer = 0;
 		// Find our game controller
 		this.gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerScript>();
 		int levelCompletionTime = GameObject.FindGameObjectWithTag("LevelStats").GetComponent<LevelStats>().levelCompletionTime;
@@ -84,6 +87,7 @@ public class PlayerController : MonoBehaviour,IReset {
 
 	void FixedUpdate()
 	{
+		this.activateTimer -= 1;
 		int currentPositionInLoop = gameController.GetCurrentPositionInLoop();
 		// Our player has not pressed anything
 		if (this.currentInput.isEmpty())
@@ -148,6 +152,19 @@ public class PlayerController : MonoBehaviour,IReset {
 
 		// Add platform movement
 		rigidbody2D.velocity += new Vector2(groundCheck.GetMovement().x, 0f);
+	}
+
+	private void Activate()
+	{
+
+		if (activateTimer <= 0)
+		{
+			foreach (IActivator activator in activatorsList.Values)
+			{
+				activator.Activate();
+			}
+			activateTimer = activateCooldown;
+		}
 	}
 
 	public void SetInput(CapturedInput capturedInput)
