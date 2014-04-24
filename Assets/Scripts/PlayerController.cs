@@ -145,6 +145,9 @@ public class PlayerController : MonoBehaviour,IReset {
 			foreach (IActivator activator in activatorsList.Values)
 				activator.Activate();
 		}
+
+		// Add platform movement
+		rigidbody2D.velocity += new Vector2(groundCheck.GetMovement().x, 0f);
 	}
 
 	public void SetInput(CapturedInput capturedInput)

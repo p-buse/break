@@ -104,7 +104,7 @@ public class GameControllerScript : MonoBehaviour {
 		// Capture our current input
 		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
 		bool rightKey = (Input.GetAxis ("Horizontal") > 0);
-		bool jumpKey = Input.GetButton ("Jump");
+		bool jumpKey = Input.GetButtonDown ("Jump");
 		bool actionKey = Input.GetButtonDown("Action");
 		return new CapturedInput(leftKey,rightKey,jumpKey,actionKey);
 	}

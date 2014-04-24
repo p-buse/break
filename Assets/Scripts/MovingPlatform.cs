@@ -55,7 +55,7 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 	}
 
 
-	public Vector3 Movement()
+	public Vector2 Movement()
 	{
 		if (isActive) {
 			//Horizontal movement
@@ -67,7 +67,7 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 				if (transform.position.x <= leftLimit)
 					currentDirection = 1;
 				
-				return new Vector3 (moveSpeed * currentDirection, 0f, 0f);
+				return new Vector2 (moveSpeed * currentDirection, 0f);
 			}
 			// Vertical movement
 			if (direction == Direction.Vertical) {
@@ -78,15 +78,15 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 				if (transform.position.y <= downLimit)
 					currentDirection = 1;
 				
-				return new Vector3 (0f, moveSpeed * currentDirection, 0f);
+				return new Vector2 (0f, moveSpeed * currentDirection);
 			}
 			Debug.LogError("Error: " + this.gameObject + " moving platform has no direction set!");
-			return Vector3.zero;
+			return Vector2.zero;
 		}
 		else
 			// We're inactive
 		{
-			return Vector3.zero;
+			return Vector2.zero;
 		}
 	}
 
