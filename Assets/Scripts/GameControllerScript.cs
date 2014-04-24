@@ -73,6 +73,9 @@ public class GameControllerScript : MonoBehaviour {
 			timeElapsedInLoop = 0;
 			this.ResetEverything ();
 		}
+
+		if (currentPlayer.gameObject.activeSelf == false)
+			SwitchPlayer();
 		
 	}
 	
@@ -87,16 +90,25 @@ public class GameControllerScript : MonoBehaviour {
 		// Capture our current input
 		CapturedInput currentInput = this.GetCurrentInput();
 		// Send input to current player
-		currentPlayer.SetInput(currentInput);
+		if (currentPlayer != null)
+			currentPlayer.SetInput(currentInput);
 		
 	}
 
 	void OnGUI()
 	{
 		
-		GUI.Box (new Rect(100,0,100,50),Mathf.FloorToInt((levelCompletionTime-timeElapsedInLoop) * Time.fixedDeltaTime).ToString());		
-		guiText.text = "Player: " + currentPlayer.playerName;
-		guiText.color = currentPlayer.GetPlayerColor();
+		GUI.Box (new Rect(100,0,100,50),Mathf.FloorToInt((levelCompletionTime-timeElapsedInLoop) * Time.fixedDeltaTime).ToString());
+		if (currentPlayer != null)
+		{
+			guiText.text = "Player: " + currentPlayer.playerName;
+			guiText.color = currentPlayer.GetPlayerColor();
+		}
+		else{
+			guiText.text = "No player selected";
+			guiText.color = Color.white;
+		}
+
 	}
 
 	public CapturedInput GetCurrentInput()
@@ -119,7 +131,7 @@ public class GameControllerScript : MonoBehaviour {
 		return this.timeElapsedInLoop;
 	}
 
-	private void SwitchPlayer()
+	public void SwitchPlayer()
 	{
 		
 		// Stop movement of previous player
