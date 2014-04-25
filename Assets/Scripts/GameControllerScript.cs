@@ -25,16 +25,19 @@ public class GameControllerScript : MonoBehaviour {
 	void Awake () {
 		SetLoopTime();
 		FindPlayersInScene();
-		// Change us to red initially
-		currentPlayer = redPlayer;
+		currentPlayer = null;
 		this.FindThingsToReset();
+	}
 
-
+	private Vector2 PointOnCircle(float radius, float originX, float originY, float angle)
+	{
+		return new Vector2(originX + radius * Mathf.Cos(angle), originY + radius * Mathf.Sin (angle));
 	}
 
 	private void SetLoopTime()
 	{
 		this.levelCompletionTime = GameObject.FindGameObjectWithTag("LevelStats").GetComponent<LevelStats>().levelCompletionTime;
+		this.timeElapsedInLoop = 0;
 	}
 
 	private void FindPlayersInScene()
@@ -62,7 +65,7 @@ public class GameControllerScript : MonoBehaviour {
 		// Reset the resetlist
 		FindThingsToReset();
 		FindPlayersInScene();
-		currentPlayer = redPlayer;
+		currentPlayer = null;
 	}
 
 	void FixedUpdate()
@@ -74,7 +77,7 @@ public class GameControllerScript : MonoBehaviour {
 			this.ResetEverything ();
 		}
 
-		if (currentPlayer.gameObject.activeSelf == false)
+		if (currentPlayer != null && currentPlayer.gameObject.activeSelf == false)
 			SwitchPlayer();
 		
 	}
@@ -97,18 +100,46 @@ public class GameControllerScript : MonoBehaviour {
 
 	void OnGUI()
 	{
-		
-		GUI.Box (new Rect(100,0,100,50),Mathf.FloorToInt((levelCompletionTime-timeElapsedInLoop) * Time.fixedDeltaTime).ToString());
-		if (currentPlayer != null)
-		{
-			guiText.text = "Player: " + currentPlayer.playerName;
-			guiText.color = currentPlayer.GetPlayerColor();
-		}
-		else{
-			guiText.text = "No player selected";
-			guiText.color = Color.white;
-		}
+		float originX = 30f;
+		float originY = 30f;
+		float radius = 50f;
+//		Rect loopRect = new Rect(25f,25f,(levelCompletionTime-timeElapsedInLoop) / (levelCompletionTime*1f) * rectWidth,rectHeight);
+//		// Make the rectangle white and transparent
+//		GUIDrawRect(loopRect, new Color(255,255,255));
+		float normalizedTime = (levelCompletionTime-timeElapsedInLoop) / (levelCompletionTime*1f) * Mathf.PI * 2f;
+		Vector2 p1 = new Vector2(originX, originY);
+		Vector2 p2 = PointOnCircle(radius,originX,originY,normalizedTime);
+		Drawing.DrawLine(p1,p2);
+	}
 
+	private static Texture2D _staticRectTexture;
+	private static GUIStyle _staticRectStyle;
+
+	// Note that this function is only meant to be called from OnGUI() functions.
+	// From stackoverflow
+	private static void GUIDrawRect( Rect position, Color color ) 	
+	{
+		if( _staticRectTexture == null )	
+		{	
+			_staticRectTexture = new Texture2D( 1, 1 );		
+		}
+		if( _staticRectStyle == null )
+		{
+			_staticRectStyle = new GUIStyle();
+		}
+		_staticRectTexture.SetPixel( 0, 0, color );
+		_staticRectTexture.Apply();
+		_staticRectStyle.normal.background = _staticRectTexture;
+		
+		GUI.Box( position, GUIContent.none, _staticRectStyle );
+		
+	}
+
+	private void DrawLoopClock()
+	{
+		float rectHeight = 50f;
+		Rect r = new Rect(0,0,(levelCompletionTime - timeElapsedInLoop) / levelCompletionTime, rectHeight);
+		GUIDrawRect(r,Color.red);
 	}
 
 	public CapturedInput GetCurrentInput()
@@ -143,6 +174,8 @@ public class GameControllerScript : MonoBehaviour {
 			currentPlayer = greenPlayer;
 		else if (currentPlayer == greenPlayer)
 			currentPlayer = bluePlayer;
+		else if (currentPlayer == bluePlayer)
+			currentPlayer = null;
 		else
 			currentPlayer = redPlayer;
 	}

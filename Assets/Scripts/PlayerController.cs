@@ -146,8 +146,7 @@ public class PlayerController : MonoBehaviour,IReset {
 		// Process activating
 		if (theInput.getAction())
 		{
-			foreach (IActivator activator in activatorsList.Values)
-				activator.Activate();
+			this.Activate ();
 		}
 
 		// Add platform movement
