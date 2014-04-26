@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BreakGlobals;
 
-public class GameControllerScript : MonoBehaviour {
+public class GameControllerScript : MonoBehaviour, IReset {
 
 	public float switchCooldown = 0.25f;
 	private PlayerController redPlayer;
@@ -22,16 +22,19 @@ public class GameControllerScript : MonoBehaviour {
 
 	private float nextSwitchTime = 0f;
 
+	private bool resetting;
+	private float currentResetTime;
+
+	private ResetLevel resetScript;
+
 	void Awake () {
+		this.resetScript = GetComponent<ResetLevel>();
+		this.resetting = false;
+		this.currentResetTime = 0f;
 		SetLoopTime();
 		FindPlayersInScene();
 		currentPlayer = null;
 		this.FindThingsToReset();
-	}
-
-	private Vector2 PointOnCircle(float radius, float originX, float originY, float angle)
-	{
-		return new Vector2(originX + radius * Mathf.Cos(angle), originY + radius * Mathf.Sin (angle));
 	}
 
 	private void SetLoopTime()
@@ -70,16 +73,32 @@ public class GameControllerScript : MonoBehaviour {
 
 	void FixedUpdate()
 	{
-		this.timeElapsedInLoop += 1;
-		if (timeElapsedInLoop >= levelCompletionTime)
+		if (!resetting)
 		{
-			timeElapsedInLoop = 0;
-			this.ResetEverything ();
+			this.timeElapsedInLoop += 1;
+			if (timeElapsedInLoop >= levelCompletionTime)
+			{
+				this.timeElapsedInLoop = -1;
+				resetScript.StartReset(resetList);
+				this.resetting  = true;
+			}
+			else if (currentPlayer != null && currentPlayer.gameObject.activeSelf == false)
+				SwitchPlayer();
 		}
-
-		if (currentPlayer != null && currentPlayer.gameObject.activeSelf == false)
-			SwitchPlayer();
 		
+	}
+
+	public void Resetting(float resetTime)
+	{
+		this.resetting = true;
+		this.currentResetTime = resetTime;
+	}
+	
+	public void Reset()
+	{
+		this.timeElapsedInLoop = 0;
+		this.resetting = false;
+		this.currentResetTime = 1f;
 	}
 	
 	void Update () {
@@ -100,51 +119,26 @@ public class GameControllerScript : MonoBehaviour {
 
 	void OnGUI()
 	{
-		float originX = 30f;
-		float originY = 30f;
-		float radius = 50f;
-//		Rect loopRect = new Rect(25f,25f,(levelCompletionTime-timeElapsedInLoop) / (levelCompletionTime*1f) * rectWidth,rectHeight);
-//		// Make the rectangle white and transparent
-//		GUIDrawRect(loopRect, new Color(255,255,255));
-		float normalizedTime = (levelCompletionTime-timeElapsedInLoop) / (levelCompletionTime*1f) * Mathf.PI * 2f;
-		Vector2 p1 = new Vector2(originX, originY);
-		Vector2 p2 = PointOnCircle(radius,originX,originY,normalizedTime);
-		Drawing.DrawLine(p1,p2);
+		float rectWidth = Screen.width;
+		float rectHeight = Screen.height;
+		float normalizedTime;
+
+		if (this.resetting)
+			normalizedTime = 1f - currentResetTime;
+		else
+			normalizedTime = (levelCompletionTime-timeElapsedInLoop) / (levelCompletionTime*1f);
+
+		Color rectColor = new Color(255,255,255,0.1f);
+		Rect loopRect = new Rect(0,0,rectWidth * normalizedTime, rectHeight);
+		// Make the rectangle white and transparent
+		Drawing.GUIDrawRect(loopRect, rectColor);
 	}
 
-	private static Texture2D _staticRectTexture;
-	private static GUIStyle _staticRectStyle;
 
-	// Note that this function is only meant to be called from OnGUI() functions.
-	// From stackoverflow
-	private static void GUIDrawRect( Rect position, Color color ) 	
-	{
-		if( _staticRectTexture == null )	
-		{	
-			_staticRectTexture = new Texture2D( 1, 1 );		
-		}
-		if( _staticRectStyle == null )
-		{
-			_staticRectStyle = new GUIStyle();
-		}
-		_staticRectTexture.SetPixel( 0, 0, color );
-		_staticRectTexture.Apply();
-		_staticRectStyle.normal.background = _staticRectTexture;
-		
-		GUI.Box( position, GUIContent.none, _staticRectStyle );
-		
-	}
-
-	private void DrawLoopClock()
-	{
-		float rectHeight = 50f;
-		Rect r = new Rect(0,0,(levelCompletionTime - timeElapsedInLoop) / levelCompletionTime, rectHeight);
-		GUIDrawRect(r,Color.red);
-	}
 
 	public CapturedInput GetCurrentInput()
 	{
-		// Capture our current input
+		// Capture our current input if we're not resetting
 		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
 		bool rightKey = (Input.GetAxis ("Horizontal") > 0);
 		bool jumpKey = Input.GetButtonDown ("Jump");
@@ -180,14 +174,6 @@ public class GameControllerScript : MonoBehaviour {
 			currentPlayer = redPlayer;
 	}
 
-	private void ResetEverything()
-	{
-		foreach (IReset resetScript in this.resetList)
-		{
-			resetScript.Reset ();
-		}
-	}
-	
 	private void FindThingsToReset()
 	{
 		this.resetList = new LinkedList<IReset>();

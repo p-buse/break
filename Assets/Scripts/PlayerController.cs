@@ -27,8 +27,11 @@ public class PlayerController : MonoBehaviour,IReset {
 	/// If true, will overwrite loop with emptiness as it goes.
 	/// </summary>
 	private bool overwriteLoop;
+
+	private bool resetting;
 	void Awake()
 	{
+		this.resetting = false;
 		// Set our activate cooldown
 		this.activateTimer = 0;
 		// Find our game controller
@@ -51,76 +54,85 @@ public class PlayerController : MonoBehaviour,IReset {
 
 	void OnTriggerEnter2D(Collider2D collider)
 	{
-
-		if (collider.gameObject.name.Equals("Exit Door"))
+		if (!resetting)
 		{
-			gameController.GetComponent<AdvanceLevel>().SetComplete(playerName, true);
-			gameObject.SetActive(false);
-		}
-		if (collider.gameObject.tag.Equals ( "Mechanical"))
-		{
-			// Check whether this contains an activator component
-			IActivator activator = (IActivator) collider.gameObject.GetComponent(typeof(IActivator));
-			if (activator != null)
+			if (collider.gameObject.name.Equals("Exit Door"))
 			{
-				int activatorID = collider.gameObject.GetInstanceID();
-				// If it isn't in the table
-				if (!activatorsList.ContainsKey(activatorID))
-				{
-					// Add it to the table
-					activatorsList.Add(activatorID,activator);
-				}
-
+				gameController.GetComponent<AdvanceLevel>().SetComplete(playerName, true);
+				gameObject.SetActive(false);
 			}
-
+			if (collider.gameObject.tag.Equals ( "Mechanical"))
+			{
+				// Check whether this contains an activator component
+				IActivator activator = (IActivator) collider.gameObject.GetComponent(typeof(IActivator));
+				if (activator != null)
+				{
+					int activatorID = collider.gameObject.GetInstanceID();
+					// If it isn't in the table
+					if (!activatorsList.ContainsKey(activatorID))
+					{
+						// Add it to the table
+						activatorsList.Add(activatorID,activator);
+					}
+					
+				}
+				
+			}
 		}
+
 	}
 
 	void OnTriggerExit2D(Collider2D collider)
 	{
-		int activatorID = collider.gameObject.GetInstanceID();
-		if (activatorsList.ContainsKey (activatorID))
+		if (!resetting)
 		{
-			activatorsList.Remove(activatorID);
+			int activatorID = collider.gameObject.GetInstanceID();
+			if (activatorsList.ContainsKey (activatorID))
+			{
+				activatorsList.Remove(activatorID);
+			}
 		}
 	}
 
 	void FixedUpdate()
 	{
-		this.activateTimer -= 1;
 		int currentPositionInLoop = gameController.GetCurrentPositionInLoop();
-		// Our player has not pressed anything
-		if (this.currentInput.isEmpty())
+		// If position in loop is -1, we're resetting. Also check our own variable
+		if (!resetting && currentPositionInLoop != -1)
 		{
-
-			if (this.overwriteLoop)
+			this.activateTimer -= 1;
+			// Our player has not pressed anything
+			if (this.currentInput.isEmpty())
 			{
-				// If we're overwriting, record a "no-op" and do nothing
-				recordedInput[currentPositionInLoop] = currentInput;
-				this.ActUsingInput(currentInput);
-			}
-			else
-			{
-
-				if (recordedInput[currentPositionInLoop] != null)
+				
+				if (this.overwriteLoop)
 				{
-					// If we have no input from the player AND we have recorded stuff, use that!
-					this.ActUsingInput((CapturedInput)recordedInput[currentPositionInLoop]);
+					// If we're overwriting, record a "no-op" and do nothing
+					recordedInput[currentPositionInLoop] = currentInput;
+					this.ActUsingInput(currentInput);
 				}
 				else
 				{
-					// If we have no input from the player and don't have recorded stuff, stop movement.
-					this.ActUsingInput(currentInput);
+					
+					if (recordedInput[currentPositionInLoop] != null)
+					{
+						// If we have no input from the player AND we have recorded stuff, use that!
+						this.ActUsingInput((CapturedInput)recordedInput[currentPositionInLoop]);
+					}
+					else
+					{
+						// If we have no input from the player and don't have recorded stuff, stop movement.
+						this.ActUsingInput(currentInput);
+					}
 				}
 			}
-
-		}
-		// Our player has pressed something
-		else
-		{
-			recordedInput[currentPositionInLoop] = currentInput;
-			this.ActUsingInput(currentInput);
-			this.overwriteLoop = true;
+			// Our player has pressed something
+			else
+			{
+				recordedInput[currentPositionInLoop] = currentInput;
+				this.ActUsingInput(currentInput);
+				this.overwriteLoop = true;
+			}
 		}
 	}
 
@@ -171,12 +183,20 @@ public class PlayerController : MonoBehaviour,IReset {
 		this.currentInput = capturedInput;
 	}
 
+	public void Resetting(float resetTime)
+	{
+		this.resetting = true;
+		this.rigidbody2D.velocity = Vector2.zero;
+		this.transform.position = Vector3.Lerp(this.transform.position, originalPosition, resetTime);
+	}
+
 	public void Reset()
 	{
 		gameObject.SetActive(true);
+		this.rigidbody2D.velocity = Vector2.zero;
 		this.transform.position = this.originalPosition;
-		this.rigidbody2D.velocity = new Vector2();
 		this.activatorsList = new Hashtable(); // Clear the activators list
 		this.overwriteLoop = false;
+		this.resetting = false;
 	}
 }

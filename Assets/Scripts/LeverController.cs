@@ -5,12 +5,14 @@ public class LeverController : MonoBehaviour,IActivator,IReset
 {
 	public Animator animationController;
 	public GameObject[] activatedObjects;
+	public bool isActive;
 	private IActivator[] activateScripts;
 	private bool originalState;
 
 	void Awake()
 	{
-		this.originalState = animationController.GetBool ("isOn");
+		this.originalState = this.isActive;
+		animationController.SetBool ("isOn", this.isActive);
 		activateScripts = new IActivator[activatedObjects.Length];
 
 		for (int i = 0; i < activatedObjects.Length; i++)
@@ -18,24 +20,26 @@ public class LeverController : MonoBehaviour,IActivator,IReset
 			activateScripts[i] = (IActivator) activatedObjects[i].GetComponent (typeof(IActivator));
 			if (activateScripts[i] == null)
 			{
-				Debug.Log ("Warning: Couldn't find IActivator in object " + activatedObjects);
+				Debug.LogWarning ("Warning: Couldn't find IActivator in object " + activatedObjects);
 			}
 		}
 	}
 
 	public void Reset()
 	{
-		animationController.SetBool("isOn",originalState);
+			this.isActive = originalState;
+			animationController.SetBool("isOn",this.isActive);
 	}
+
+	public void Resetting(float r){}
 
 	/// <summary>
 	/// Toggles the lever, reverses the animation state of the lever and activates the target script.
 	/// </summary>
 	public void Activate()
 	{
-		bool leverIsOn = animationController.GetBool("isOn");
-		leverIsOn = !leverIsOn;
-		animationController.SetBool("isOn",leverIsOn);
+		this.isActive = !this.isActive;
+		animationController.SetBool("isOn", this.isActive);
 		foreach (IActivator activateScript in activateScripts)
 		{
 			activateScript.Activate();

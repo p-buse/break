@@ -60,5 +60,7 @@ public class AdvanceLevel : MonoBehaviour, IReset {
 		greenComplete = false;
 		blueComplete = false;
 	}
+
+	public void Resetting(float resetTime){}
 	
 }

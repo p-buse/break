@@ -54,6 +54,11 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 		this.currentDirection = this.originalDirection;
 	}
 
+	public void Resetting(float resetTime)
+	{
+		this.transform.position = Vector3.Lerp (this.transform.position, originalPosition, resetTime);
+	}
+
 
 	public Vector2 Movement()
 	{
