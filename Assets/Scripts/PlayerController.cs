@@ -185,14 +185,14 @@ public class PlayerController : MonoBehaviour,IReset {
 
 	public void Resetting(float resetTime)
 	{
+		gameObject.SetActive(true);
 		this.resetting = true;
 		this.rigidbody2D.velocity = Vector2.zero;
-		this.transform.position = Vector3.Lerp(this.transform.position, originalPosition, resetTime);
+		this.transform.position = Vector3.Lerp (transform.position, this.originalPosition, 1f - resetTime);
 	}
 
 	public void Reset()
 	{
-		gameObject.SetActive(true);
 		this.rigidbody2D.velocity = Vector2.zero;
 		this.transform.position = this.originalPosition;
 		this.activatorsList = new Hashtable(); // Clear the activators list

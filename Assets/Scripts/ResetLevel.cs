@@ -56,7 +56,19 @@ public class ResetLevel : MonoBehaviour {
 			}
 			else
 			{
-				float normalizedResetTime = (float)(timeToReset - currentResetTime) / (float)(timeToReset);
+				float normalizedResetTime;
+				if (currentResetTime == timeToReset)
+				{
+					normalizedResetTime = 0f;
+				}
+				else if (currentResetTime == 0)
+				{
+					normalizedResetTime = 1f;
+				}
+				else
+				{
+					normalizedResetTime = (float)(timeToReset - currentResetTime) / (float)(timeToReset);
+				}
 				ResettingAll(normalizedResetTime);
 				currentResetTime += 1;
 				break;
