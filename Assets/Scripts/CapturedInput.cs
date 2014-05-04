@@ -7,7 +7,7 @@ using System.Collections;
 public class CapturedInput {
 
 	private BitArray inputArray;
-	enum Buttons {Left=0, Right=1, Jump=2, Action=3};
+	enum Buttons {Left=0, Right=1, Jump=2};
 	private bool empty;
 
 	/// <summary>
@@ -17,14 +17,13 @@ public class CapturedInput {
 	/// <param name="rightKey">If set to <c>true</c> right key is pressed.</param>
 	/// <param name="jumpKey">If set to <c>true</c> jump key is pressed.</param>
 	/// <param name="actionKey">If set to <c>true</c> action key is pressed.</param>
-	public CapturedInput(bool leftKey, bool rightKey, bool jumpKey, bool actionKey)
+	public CapturedInput(bool leftKey, bool rightKey, bool jumpKey)
 	{
-		inputArray = new BitArray(4);
+		inputArray = new BitArray(3);
 		inputArray.Set (0,leftKey);
 		inputArray.Set (1,rightKey);
 		inputArray.Set(2,jumpKey);
-		inputArray.Set(3,actionKey);
-		if ((leftKey || rightKey || jumpKey || actionKey) == false)
+		if ((leftKey || rightKey || jumpKey) == false)
 		{
 			this.empty = true;
 		}
@@ -37,7 +36,7 @@ public class CapturedInput {
 	/// </summary>
 	public CapturedInput()
 	{
-		inputArray = new BitArray(4);
+		inputArray = new BitArray(3);
 		this.empty = true;
 	}
 
@@ -56,11 +55,6 @@ public class CapturedInput {
 		return inputArray.Get(2);
 	}
 
-	public bool getAction()
-	{
-		return inputArray.Get(3);
-	}
-
 	public bool isEmpty()
 	{
 		return this.empty;
@@ -68,8 +62,8 @@ public class CapturedInput {
 
 	public override string ToString()
 	{
-		return string.Format("Left: {0}\nRight: {1}\nJump: {2}\nAct: {3}\nisEmpty? {4}",
-		                     getLeft(),getRight(),getJump(),getAction(),isEmpty());
+		return string.Format("Left: {0}\nRight: {1}\nJump: {2}\nisEmpty? {3}",
+		                     getLeft(),getRight(),getJump(),isEmpty());
 	}
 
 }

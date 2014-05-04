@@ -22,6 +22,8 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 	private int originalDirection;
 	private bool originalIsActive;
 
+	private Animator animController;
+
 
 	void Awake()
 	{
@@ -35,17 +37,21 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 		originalPosition = transform.position;
 		originalIsActive = isActive;
 		originalDirection = currentDirection;
+
+		this.animController = GetComponent<Animator>();
+		if (this.animController == null)
+			Debug.LogWarning("Warning: Moving platform couldn't find animator!");
 	}
+
+
 
 	void FixedUpdate()
 	{
 		rigidbody2D.velocity = (this.Movement());
+		this.animController.SetBool("isMoving",this.isActive);
 	}
 
-	public void Activate()
-	{
-		isActive = !isActive;
-	}
+
 
 	public void Activate(bool isActive)
 	{

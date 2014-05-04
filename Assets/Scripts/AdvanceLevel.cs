@@ -38,7 +38,7 @@ public class AdvanceLevel : MonoBehaviour, IReset {
 		}
 		else
 		{
-			Debug.Log ("No more levels to load!");
+			Application.LoadLevel(0);
 		}
 	}
 

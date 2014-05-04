@@ -155,28 +155,10 @@ public class PlayerController : MonoBehaviour,IReset {
 		if (theInput.getJump() && groundCheck.IsGrounded())
 			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
 
-		// Process activating
-		if (theInput.getAction())
-		{
-			this.Activate ();
-		}
-
 		// Add platform movement
 		rigidbody2D.velocity += new Vector2(groundCheck.GetMovement().x, 0f);
 	}
 
-	private void Activate()
-	{
-
-		if (activateTimer <= 0)
-		{
-			foreach (IActivator activator in activatorsList.Values)
-			{
-				activator.Activate();
-			}
-			activateTimer = activateCooldown;
-		}
-	}
 
 	public void SetInput(CapturedInput capturedInput)
 	{
