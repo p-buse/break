@@ -33,7 +33,7 @@ public class GameControllerScript : MonoBehaviour, IReset {
 		this.currentResetTime = 0f;
 		SetLoopTime();
 		FindPlayersInScene();
-		currentPlayer = null;
+		currentPlayer = redPlayer;
 		this.FindThingsToReset();
 	}
 
@@ -68,7 +68,7 @@ public class GameControllerScript : MonoBehaviour, IReset {
 		// Reset the resetlist
 		FindThingsToReset();
 		FindPlayersInScene();
-		currentPlayer = null;
+		currentPlayer = redPlayer;
 	}
 
 	void FixedUpdate()
@@ -128,7 +128,12 @@ public class GameControllerScript : MonoBehaviour, IReset {
 		else
 			normalizedTime = (levelCompletionTime-timeElapsedInLoop) / (levelCompletionTime*1f);
 
-		Color rectColor = new Color(255,255,255,0.1f);
+		Color rectColor;
+		if (currentPlayer != null)
+			rectColor = currentPlayer.GetPlayerColor();
+		else
+			rectColor = new Color(255,255,255);
+		rectColor.a = (0.1f);
 		Rect loopRect = new Rect(0,0,rectWidth * normalizedTime, rectHeight);
 		// Make the rectangle white and transparent
 		Drawing.GUIDrawRect(loopRect, rectColor);
@@ -165,13 +170,27 @@ public class GameControllerScript : MonoBehaviour, IReset {
 
 		// Cycle through the three different players
 		if (currentPlayer == redPlayer)
-			currentPlayer = greenPlayer;
+		{
+			if (greenPlayer.gameObject.activeSelf)
+				currentPlayer = greenPlayer;
+			else if (bluePlayer.gameObject.activeSelf)
+				currentPlayer = bluePlayer;
+		}
 		else if (currentPlayer == greenPlayer)
-			currentPlayer = bluePlayer;
+		{
+			if (bluePlayer.gameObject.activeSelf)
+				currentPlayer = bluePlayer;
+			else if (redPlayer.gameObject.activeSelf)
+				currentPlayer = redPlayer;
+		}
 		else if (currentPlayer == bluePlayer)
-			currentPlayer = null;
-		else
-			currentPlayer = redPlayer;
+		{
+			if (redPlayer.gameObject.activeSelf)
+				currentPlayer = redPlayer;
+			else if (greenPlayer.gameObject.activeSelf)
+				currentPlayer = greenPlayer;
+		}
+			
 	}
 
 	private void FindThingsToReset()

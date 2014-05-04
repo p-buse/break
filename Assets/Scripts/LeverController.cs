@@ -33,6 +33,14 @@ public class LeverController : MonoBehaviour,IActivator,IReset
 
 	public void Resetting(float r){}
 
+	private void ActivateObjects()
+	{
+		foreach (IActivator activateScript in activateScripts)
+		{
+			activateScript.Activate();
+		}
+	}
+
 	/// <summary>
 	/// Toggles the lever, reverses the animation state of the lever and activates the target script.
 	/// </summary>
@@ -40,11 +48,14 @@ public class LeverController : MonoBehaviour,IActivator,IReset
 	{
 		this.isActive = !this.isActive;
 		animationController.SetBool("isOn", this.isActive);
-		foreach (IActivator activateScript in activateScripts)
-		{
-			activateScript.Activate();
-		}
+		ActivateObjects();
 
+	}
+
+	public void Activate(bool isActive)
+	{
+		animationController.SetBool("isOn", this.isActive);
+		ActivateObjects();
 	}
 
 }
