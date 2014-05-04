@@ -47,6 +47,11 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 		isActive = !isActive;
 	}
 
+	public void Activate(bool isActive)
+	{
+		this.isActive = isActive;
+	}
+
 	public void Reset()
 	{
 		this.transform.position = this.originalPosition;
