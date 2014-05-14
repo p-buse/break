@@ -3,7 +3,8 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour,IReset {
 	public float jumpForce; // Our jump force
-	public float moveSpeed; // Our horizontal movement speed
+	public float maxMoveSpeed; // Maximum horizontal speed
+	public float horizontalAcceleration;
 	public string playerName; // Our player's name
 	private Color playerColor; // Our player's color (set in the Sprite)
 	public int activateCooldown = 10; // How long between activations (in 50ths of a second)
@@ -56,12 +57,12 @@ public class PlayerController : MonoBehaviour,IReset {
 	{
 		if (!resetting)
 		{
-			if (collider.gameObject.name.Equals("Exit Door"))
+			if (collider.gameObject.name.Equals ( "Exit Door" ))
 			{
 				gameController.GetComponent<AdvanceLevel>().SetComplete(playerName, true);
 				gameObject.SetActive(false);
 			}
-			if (collider.gameObject.tag.Equals ( "Mechanical"))
+			if (collider.gameObject.tag.Equals ( "Mechanical" ))
 			{
 				// Check whether this contains an activator component
 				IActivator activator = (IActivator) collider.gameObject.GetComponent(typeof(IActivator));
@@ -141,19 +142,28 @@ public class PlayerController : MonoBehaviour,IReset {
 		return this.playerColor;
 	}
 
+	/// <summary>
+	/// Act (move)using the given input frame.
+	/// Called every FixedUpdate().
+	/// </summary>
+	/// <param name="theInput">The input.</param>
 	private void ActUsingInput(CapturedInput theInput)
 	{
-		// Process horizontal movement
-		float horizontalMovement = 0f;
-		if (theInput.getLeft ())
-			horizontalMovement = -moveSpeed;
-		else if (theInput.getRight())
-			horizontalMovement = moveSpeed;
-		horizontalMovement *= moveSpeed;
-		rigidbody2D.velocity = new Vector2(horizontalMovement,rigidbody2D.velocity.y);
+		if (groundCheck.IsGrounded())
+		{
+			if (theInput.getLeft ())
+				rigidbody2D.AddForce(new Vector2(-horizontalAcceleration, 0f));
+			else if (theInput.getRight())
+				rigidbody2D.AddForce(new Vector2(horizontalAcceleration, 0f));
+			// Clamp the maximum horizontal movespeed
+//			rigidbody2D.velocity = new Vector2(Mathf.Clamp(rigidbody2D.velocity.x,0f,maxMoveSpeed), rigidbody2D.velocity.y);
+		}
 		// Process jumping
 		if (theInput.getJump() && groundCheck.IsGrounded())
+		{
 			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+			groundCheck.SetGrounded(false);
+		}
 
 		// Add platform movement
 		rigidbody2D.velocity += new Vector2(groundCheck.GetMovement().x, 0f);
@@ -171,11 +181,13 @@ public class PlayerController : MonoBehaviour,IReset {
 		this.resetting = true;
 		this.rigidbody2D.velocity = Vector2.zero;
 		this.transform.position = Vector3.Lerp (transform.position, this.originalPosition, 1f - resetTime);
+		this.transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, 1f - resetTime);
 	}
 
 	public void Reset()
 	{
 		this.rigidbody2D.velocity = Vector2.zero;
+		this.transform.rotation = Quaternion.identity;
 		this.transform.position = this.originalPosition;
 		this.activatorsList = new Hashtable(); // Clear the activators list
 		this.overwriteLoop = false;

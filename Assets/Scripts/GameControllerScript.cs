@@ -146,7 +146,7 @@ public class GameControllerScript : MonoBehaviour, IReset {
 		// Capture our current input if we're not resetting
 		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
 		bool rightKey = (Input.GetAxis ("Horizontal") > 0);
-		bool jumpKey = Input.GetButton ("Jump");
+		bool jumpKey = Input.GetButtonDown ("Jump");
 		return new CapturedInput(leftKey,rightKey,jumpKey);
 	}
 
