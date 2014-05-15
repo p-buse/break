@@ -53,6 +53,14 @@ public class PlayerController : MonoBehaviour,IReset {
 		activatorsList = new Hashtable(); // Clear the activators list
 	}
 
+	void OnCollisionEnter2D(Collision2D coll)
+	{
+		if (coll.gameObject.layer == groundCheck.GetJumpableLayerMask() );
+		{
+			groundCheck.SetJumped(false);
+		}
+	}
+
 	void OnTriggerEnter2D(Collider2D collider)
 	{
 		if (!resetting)
@@ -156,13 +164,13 @@ public class PlayerController : MonoBehaviour,IReset {
 			else if (theInput.getRight())
 				rigidbody2D.AddForce(new Vector2(horizontalAcceleration, 0f));
 			// Clamp the maximum horizontal movespeed
-//			rigidbody2D.velocity = new Vector2(Mathf.Clamp(rigidbody2D.velocity.x,0f,maxMoveSpeed), rigidbody2D.velocity.y);
+			rigidbody2D.velocity = new Vector2(Mathf.Clamp(rigidbody2D.velocity.x,-maxMoveSpeed,maxMoveSpeed), rigidbody2D.velocity.y);
 		}
 		// Process jumping
 		if (theInput.getJump() && groundCheck.IsGrounded())
 		{
 			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
-			groundCheck.SetGrounded(false);
+			groundCheck.SetJumped(true);
 		}
 
 		// Add platform movement
@@ -182,11 +190,13 @@ public class PlayerController : MonoBehaviour,IReset {
 		this.rigidbody2D.velocity = Vector2.zero;
 		this.transform.position = Vector3.Lerp (transform.position, this.originalPosition, 1f - resetTime);
 		this.transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, 1f - resetTime);
+		this.rigidbody2D.angularVelocity = 0f;
 	}
 
 	public void Reset()
 	{
 		this.rigidbody2D.velocity = Vector2.zero;
+		this.rigidbody2D.angularVelocity = 0f;
 		this.transform.rotation = Quaternion.identity;
 		this.transform.position = this.originalPosition;
 		this.activatorsList = new Hashtable(); // Clear the activators list

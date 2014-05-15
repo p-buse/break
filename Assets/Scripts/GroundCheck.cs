@@ -4,7 +4,8 @@ using System.Collections;
 public class GroundCheck : MonoBehaviour {
 	private float distanceDownToCheck; // The distance below to check for ground
 
-	bool grounded;
+	private bool hasJumped;
+	private bool grounded;
 	private int groundAndDefaultLayerMask;
 
 	private IMover mover;
@@ -13,10 +14,11 @@ public class GroundCheck : MonoBehaviour {
 	private float leftOfColliderX;
 	private float rightOfColliderX;
 
-	private RaycastHit2D[] theGround = new RaycastHit2D[1];
+	private RaycastHit2D[] theGround = new RaycastHit2D[2];
 
 	void Awake()
 	{
+		this.hasJumped = false;
 		this.distanceDownToCheck = 0.05f;
 		BoxCollider2D boxCol = GetComponent<BoxCollider2D>();
 		this.bottomOfColliderY = boxCol.center.y - boxCol.size.y / 2;
@@ -41,8 +43,20 @@ public class GroundCheck : MonoBehaviour {
 		// Cast a line and check if it collides with ground
 		int numGround = Physics2D.LinecastNonAlloc (bottomLeft, bottomRight, theGround,	groundAndDefaultLayerMask);
 		Debug.DrawLine (bottomLeft,bottomRight);
-		// If we collided with > 0 "Ground" objects, then we're grounded!
-		this.grounded = (numGround > 0 && theGround[0].collider.gameObject != this.gameObject);
+		// If we collided with > 0 "Ground" objects, then we might be grounded!
+		if (numGround > 0)
+		{
+			// Quick fix to avoid the player in the array preventing the platform from being detected
+			if (theGround[0].collider.gameObject == this.gameObject && theGround[1])
+			{
+				theGround[0] = theGround[1];
+			}
+			this.grounded = (theGround[0].collider.gameObject != this.gameObject && !this.hasJumped);
+		}
+		else
+			this.grounded = false;
+
+
 
 		if (this.grounded)
 		{
@@ -60,6 +74,8 @@ public class GroundCheck : MonoBehaviour {
 		{
 			mover = null;
 		}
+		theGround = new RaycastHit2D[2];
+		numGround = 0;
 		
 	}
 
@@ -69,12 +85,21 @@ public class GroundCheck : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets whether we are grounded.
+	/// Sets whether we have jumped
 	/// </summary>
-	/// <param name="newGroundedState">If set to <c>true</c>, we're grounded.</param>
-	public void SetGrounded(bool newGroundedState)
+	/// <param name="hasJumped">If set to <c>true</c>, we're jumping!.</param>
+	public void SetJumped(bool hasJumped)
 	{
-		this.grounded = newGroundedState;
+		this.hasJumped = hasJumped;
+	}
+
+	/// <summary>
+	/// Gets the layer mask of layers that allow players to jump from.
+	/// </summary>
+	/// <returns>The jumpable layer mask.</returns>
+	public int GetJumpableLayerMask()
+	{
+		return this.groundAndDefaultLayerMask;
 	}
 
 	public Vector2 GetMovement()
