@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour, IReset {
 
 	public Camera theCamera;
 	public GameControllerScript gameController;
+	private bool resetting;
 
 	public float zoomSpeed; //How fast the camera should zoom in and out on the player
-	public float closeFOV = 4;
-	public float farFOV = 20;
+	public float closeFOV;
+	private float farFOV;
 	
 	private PlayerController currentPlayer;
 
 	void Awake()
 	{
+		farFOV = theCamera.orthographicSize;
+		resetting = false;
 		gameController = gameObject.GetComponent<GameControllerScript>();
 		currentPlayer = gameController.CurrentPlayer();
 	}
@@ -23,7 +26,11 @@ public class CameraController : MonoBehaviour {
 		currentPlayer = gameController.CurrentPlayer();
 		if (currentPlayer == null)
 		{
-			ZoomFar();
+			ZoomFar(this.zoomSpeed);
+		}
+		else if (resetting == true)
+		{
+
 		}
 		else
 		{
@@ -31,7 +38,18 @@ public class CameraController : MonoBehaviour {
 		}
 	}
 
-	void ZoomFar()
+	public void Resetting(float resetTime)
+	{
+		ZoomFar(1f - resetTime);
+		this.resetting = true;
+	}
+
+	public void Reset()
+	{
+		this.resetting = false;
+	}
+
+	void ZoomFar(float zoomSpeed)
 	{
 		theCamera.transform.position = new Vector3(Mathf.Lerp (theCamera.transform.position.x,0,zoomSpeed),
 		                                 Mathf.Lerp(theCamera.transform.position.y,0,zoomSpeed), 

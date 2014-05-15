@@ -20,10 +20,10 @@ public class GroundCheck : MonoBehaviour {
 	{
 		this.hasJumped = false;
 		this.distanceDownToCheck = 0.05f;
-		BoxCollider2D boxCol = GetComponent<BoxCollider2D>();
-		this.bottomOfColliderY = boxCol.center.y - boxCol.size.y / 2;
-		this.leftOfColliderX = boxCol.center.x - boxCol.size.x / 2;
-		this.rightOfColliderX = boxCol.center.x + boxCol.size.x / 2;
+		CircleCollider2D cirCol = GetComponent<CircleCollider2D>();
+		this.bottomOfColliderY = cirCol.center.y - cirCol.radius;
+		this.leftOfColliderX = cirCol.center.x - cirCol.radius;
+		this.rightOfColliderX = cirCol.center.x + cirCol.radius;
 
 		// Create the mask that lets us search for ground and other players below us
 		this.groundAndDefaultLayerMask = 1 << LayerMask.NameToLayer("Ground") | 

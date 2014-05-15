@@ -21,14 +21,20 @@ public class LeverController : MonoBehaviour,IActivator,IReset
 		this.rightOfBox = boxCol.center.x + (boxCol.size.x / 2);
 		this.originalState = this.startActive;
 		animationController.SetBool ("isOn", this.startActive);
-		activateScripts = new IActivator[activatedObjects.Length];
-
-		for (int i = 0; i < activatedObjects.Length; i++)
+		if (1 == 0)
 		{
-			activateScripts[i] = (IActivator) activatedObjects[i].GetComponent (typeof(IActivator));
-			if (activateScripts[i] == null)
+			activateScripts = null;
+		}
+		else
+		{
+			activateScripts = new IActivator[activatedObjects.Length];
+			for (int i = 0; i < activatedObjects.Length; i++)
 			{
-				Debug.LogWarning ("Warning: Couldn't find IActivator in object " + activatedObjects);
+				activateScripts[i] = (IActivator) activatedObjects[i].GetComponent (typeof(IActivator));
+				if (activateScripts[i] == null)
+				{
+					Debug.LogWarning ("Warning: Couldn't find IActivator in object " + activatedObjects);
+				}
 			}
 		}
 	}
@@ -57,9 +63,12 @@ public class LeverController : MonoBehaviour,IActivator,IReset
 	
 	private void ActivateObjects(bool isActive)
 	{
-		foreach (IActivator activateScript in activateScripts)
+		if (activateScripts != null)
 		{
-			activateScript.Activate(isActive);
+			foreach (IActivator activateScript in activateScripts)
+			{
+				activateScript.Activate(isActive);
+			}
 		}
 	}
 

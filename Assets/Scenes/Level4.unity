@@ -662,8 +662,8 @@ GameObject:
   - 50: {fileID: 1206333185}
   - 114: {fileID: 1206333184}
   - 212: {fileID: 1206333183}
-  - 61: {fileID: 1206333182}
   - 114: {fileID: 1206333186}
+  - 58: {fileID: 1206333182}
   m_Layer: 0
   m_Name: Green Player
   m_TagString: Player
@@ -682,17 +682,17 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 450354882}
---- !u!61 &1206333182
-BoxCollider2D:
+--- !u!58 &1206333182
+CircleCollider2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 6100000, guid: fffa42e18b9854a6489fdf17ff1c57d1,
+  m_PrefabParentObject: {fileID: 5800000, guid: fffa42e18b9854a6489fdf17ff1c57d1,
     type: 2}
   m_PrefabInternal: {fileID: 1896548051}
   m_GameObject: {fileID: 1206333180}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: abc3134ec321b8c4aa1e168c20210390, type: 2}
+  m_Material: {fileID: 6200000, guid: a0d1d114a2982654ea7225f46bda6280, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1, y: 2}
+  m_Radius: 1.06666672
   m_Center: {x: 0, y: 0}
 --- !u!212 &1206333183
 SpriteRenderer:
@@ -716,7 +716,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 1
   m_SortingLayerID: 762945009
-  m_Sprite: {fileID: 21300000, guid: 5b3d0233a9e184141a9138e5a635defd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fa0349f900d915646a943bdb84e313bc, type: 3}
   m_Color: {r: .407843143, g: 1, b: 0, a: 1}
 --- !u!114 &1206333184
 MonoBehaviour:
@@ -731,7 +731,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 1200
-  moveSpeed: 2
+  maxMoveSpeed: 30
+  horizontalAcceleration: 20
   playerName: Green
   activateCooldown: 10
 --- !u!50 &1206333185
@@ -1125,8 +1126,8 @@ GameObject:
   - 50: {fileID: 1610115971}
   - 114: {fileID: 1610115970}
   - 212: {fileID: 1610115969}
-  - 61: {fileID: 1610115968}
   - 114: {fileID: 1610115972}
+  - 58: {fileID: 1610115968}
   m_Layer: 0
   m_Name: Blue Player
   m_TagString: Player
@@ -1145,17 +1146,17 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 450354882}
---- !u!61 &1610115968
-BoxCollider2D:
+--- !u!58 &1610115968
+CircleCollider2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 6100000, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf,
+  m_PrefabParentObject: {fileID: 5800000, guid: 108f2a0434ca147f1b9b6ae5ed1cdcaf,
     type: 2}
   m_PrefabInternal: {fileID: 1752613040}
   m_GameObject: {fileID: 1610115966}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: abc3134ec321b8c4aa1e168c20210390, type: 2}
+  m_Material: {fileID: 6200000, guid: a0d1d114a2982654ea7225f46bda6280, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1, y: 2}
+  m_Radius: 1.06666672
   m_Center: {x: 0, y: 0}
 --- !u!212 &1610115969
 SpriteRenderer:
@@ -1179,7 +1180,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 1
   m_SortingLayerID: 762945009
-  m_Sprite: {fileID: 21300000, guid: 5b3d0233a9e184141a9138e5a635defd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fa0349f900d915646a943bdb84e313bc, type: 3}
   m_Color: {r: 0, g: .0896549225, b: 1, a: 1}
 --- !u!114 &1610115970
 MonoBehaviour:
@@ -1194,7 +1195,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 800
-  moveSpeed: 3.5
+  maxMoveSpeed: 30
+  horizontalAcceleration: 50
   playerName: Blue
   activateCooldown: 10
 --- !u!50 &1610115971
@@ -1445,8 +1447,8 @@ GameObject:
   - 50: {fileID: 1897217158}
   - 114: {fileID: 1897217157}
   - 212: {fileID: 1897217153}
-  - 61: {fileID: 1897217152}
   - 114: {fileID: 1897217154}
+  - 58: {fileID: 1897217152}
   m_Layer: 0
   m_Name: Red Player
   m_TagString: Player
@@ -1465,17 +1467,17 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 450354882}
---- !u!61 &1897217152
-BoxCollider2D:
+--- !u!58 &1897217152
+CircleCollider2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 6100000, guid: 13e0c79340d9e4beba4c6e40877ce59c,
+  m_PrefabParentObject: {fileID: 5800000, guid: 13e0c79340d9e4beba4c6e40877ce59c,
     type: 2}
   m_PrefabInternal: {fileID: 241995494}
   m_GameObject: {fileID: 1897217150}
   m_Enabled: 1
-  m_Material: {fileID: 6200000, guid: abc3134ec321b8c4aa1e168c20210390, type: 2}
+  m_Material: {fileID: 6200000, guid: a0d1d114a2982654ea7225f46bda6280, type: 2}
   m_IsTrigger: 0
-  m_Size: {x: 1, y: 2}
+  m_Radius: 1.06666672
   m_Center: {x: 0, y: 0}
 --- !u!212 &1897217153
 SpriteRenderer:
@@ -1499,7 +1501,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 1
   m_SortingLayerID: 762945009
-  m_Sprite: {fileID: 21300000, guid: 5b3d0233a9e184141a9138e5a635defd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fa0349f900d915646a943bdb84e313bc, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1897217154
 MonoBehaviour:
@@ -1526,7 +1528,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 1000
-  moveSpeed: 2.5
+  maxMoveSpeed: 30
+  horizontalAcceleration: 30
   playerName: Red
   activateCooldown: 10
 --- !u!50 &1897217158

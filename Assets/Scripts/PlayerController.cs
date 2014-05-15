@@ -157,15 +157,14 @@ public class PlayerController : MonoBehaviour,IReset {
 	/// <param name="theInput">The input.</param>
 	private void ActUsingInput(CapturedInput theInput)
 	{
-		if (groundCheck.IsGrounded())
-		{
-			if (theInput.getLeft ())
-				rigidbody2D.AddForce(new Vector2(-horizontalAcceleration, 0f));
-			else if (theInput.getRight())
-				rigidbody2D.AddForce(new Vector2(horizontalAcceleration, 0f));
-			// Clamp the maximum horizontal movespeed
-			rigidbody2D.velocity = new Vector2(Mathf.Clamp(rigidbody2D.velocity.x,-maxMoveSpeed,maxMoveSpeed), rigidbody2D.velocity.y);
-		}
+		if (theInput.getLeft ())
+			rigidbody2D.angularVelocity += horizontalAcceleration;
+//				rigidbody2D.AddForce(new Vector2(-horizontalAcceleration, 0f));
+		else if (theInput.getRight())
+			rigidbody2D.angularVelocity -= horizontalAcceleration;
+//				rigidbody2D.AddForce(new Vector2(horizontalAcceleration, 0f));
+		// Clamp the maximum horizontal movespeed
+		rigidbody2D.velocity = new Vector2(Mathf.Clamp(rigidbody2D.velocity.x,-maxMoveSpeed,maxMoveSpeed), rigidbody2D.velocity.y);
 		// Process jumping
 		if (theInput.getJump() && groundCheck.IsGrounded())
 		{
@@ -174,7 +173,7 @@ public class PlayerController : MonoBehaviour,IReset {
 		}
 
 		// Add platform movement
-		rigidbody2D.velocity += new Vector2(groundCheck.GetMovement().x, 0f);
+//		rigidbody2D.velocity += new Vector2(groundCheck.GetMovement().x, 0f);
 	}
 
 
