@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
-	public Camera theCamera;
+	private Camera theCamera;
 	public GameControllerScript gameController;
 
 	public float zoomSpeed; //How fast the camera should zoom in and out on the player
@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour {
 	void Awake()
 	{
 		gameController = gameObject.GetComponent<GameControllerScript>();
+        this.theCamera = Camera.main;
 		currentPlayer = gameController.CurrentPlayer();
 	}
 

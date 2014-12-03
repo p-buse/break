@@ -7,7 +7,6 @@ using System.Collections;
 public class CapturedInput {
 
 	private BitArray inputArray;
-	enum Buttons {Left=0, Right=1, Jump=2};
 	private bool empty;
 
 	/// <summary>

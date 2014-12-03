@@ -35,8 +35,8 @@ public class PlayerController : MonoBehaviour,IReset {
 		// Set our activate cooldown
 		this.activateTimer = 0;
 		// Find our game controller
-		this.gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameControllerScript>();
-		int levelCompletionTime = GameObject.FindGameObjectWithTag("LevelStats").GetComponent<LevelStats>().levelCompletionTime;
+		this.gameController = FindObjectOfType<GameControllerScript>();
+		int levelCompletionTime = FindObjectOfType<LevelStats>().levelCompletionTime;
 		// Allocate enough space in the array for recorded input
 		this.recordedInput = new CapturedInput[levelCompletionTime];
 		this.groundCheck = GetComponent<GroundCheck>();

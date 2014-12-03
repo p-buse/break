@@ -39,7 +39,7 @@ public class GameControllerScript : MonoBehaviour, IReset {
 
 	private void SetLoopTime()
 	{
-		this.levelCompletionTime = GameObject.FindGameObjectWithTag("LevelStats").GetComponent<LevelStats>().levelCompletionTime;
+		this.levelCompletionTime = GameObject.FindObjectOfType<LevelStats>().levelCompletionTime;
 		this.timeElapsedInLoop = 0;
 	}
 
@@ -102,6 +102,10 @@ public class GameControllerScript : MonoBehaviour, IReset {
 	}
 	
 	void Update () {
+        if (Input.GetButtonDown("Exit"))
+        {
+            Application.Quit();
+        }
 		// Switch players, if pressing the switch button
 		if (Input.GetButton("SwitchPlayer") && Time.time > nextSwitchTime)
 		{
