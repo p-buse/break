@@ -165,17 +165,30 @@ public class PlayerController : MonoBehaviour,IReset {
 		this.currentInput = capturedInput;
 	}
 
+    public void OverwriteRestOfInput()
+    {
+        if (this.overwriteLoop)
+        {
+            for (int i = gameController.GetCurrentPositionInLoop(); i < this.recordedInput.Length; i++)
+            {
+                this.recordedInput[i] = new CapturedInput();
+            }
+        }
+    }
+
 	public void Resetting(float resetTime)
 	{
 		gameObject.SetActive(true);
 		this.resetting = true;
 		this.rigidbody2D.velocity = Vector2.zero;
+        this.collider2D.enabled = false;
 		this.transform.position = Vector3.Lerp (transform.position, this.originalPosition, 1f - resetTime);
 	}
 
 	public void Reset()
 	{
 		this.rigidbody2D.velocity = Vector2.zero;
+        this.collider2D.enabled = true;
 		this.transform.position = this.originalPosition;
 		this.activatorsList = new Hashtable(); // Clear the activators list
 		this.overwriteLoop = false;

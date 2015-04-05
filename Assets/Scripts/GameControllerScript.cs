@@ -78,15 +78,21 @@ public class GameControllerScript : MonoBehaviour, IReset {
 			this.timeElapsedInLoop += 1;
 			if (timeElapsedInLoop >= levelCompletionTime)
 			{
-				this.timeElapsedInLoop = -1;
-				resetScript.StartReset(resetList);
-				this.resetting  = true;
+                ResetEverything();
 			}
 			else if (currentPlayer != null && currentPlayer.gameObject.activeSelf == false)
 				SwitchPlayer();
 		}
 		
 	}
+
+    private void ResetEverything()
+    {
+        currentPlayer.OverwriteRestOfInput();
+        this.timeElapsedInLoop = -1;
+        resetScript.StartReset(resetList);
+        this.resetting = true;
+    }
 
 	public void Resetting(float resetTime)
 	{
@@ -112,6 +118,10 @@ public class GameControllerScript : MonoBehaviour, IReset {
 			nextSwitchTime = Time.time + this.switchCooldown;
 			SwitchPlayer ();
 		}
+        if (Input.GetButtonDown("Reset") && !this.resetting)
+        {
+            this.ResetEverything();
+        }
 		
 		// Capture our current input
 		CapturedInput currentInput = this.GetCurrentInput();
@@ -150,7 +160,7 @@ public class GameControllerScript : MonoBehaviour, IReset {
 		// Capture our current input if we're not resetting
 		bool leftKey = (Input.GetAxis ("Horizontal") < 0);
 		bool rightKey = (Input.GetAxis ("Horizontal") > 0);
-		bool jumpKey = Input.GetButton ("Jump");
+		bool jumpKey = Input.GetButtonDown ("Jump");
 		return new CapturedInput(leftKey,rightKey,jumpKey);
 	}
 
