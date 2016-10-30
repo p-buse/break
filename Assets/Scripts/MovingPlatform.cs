@@ -47,7 +47,7 @@ public class MovingPlatform : MonoBehaviour,IActivator,IMover,IReset {
 
 	void FixedUpdate()
 	{
-		rigidbody2D.velocity = (this.Movement());
+		GetComponent<Rigidbody2D>().velocity = (this.Movement());
 		this.animController.SetBool("isMoving",this.isActive);
 	}
 

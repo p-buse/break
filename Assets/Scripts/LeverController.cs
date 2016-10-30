@@ -17,8 +17,8 @@ public class LeverController : MonoBehaviour,IActivator,IReset
 	{
 		this.defaultLayer = 1 << LayerMask.NameToLayer("Default");
 		BoxCollider2D boxCol = GetComponent<BoxCollider2D>();
-		this.leftOfBox = boxCol.center.x - (boxCol.size.x / 2);
-		this.rightOfBox = boxCol.center.x + (boxCol.size.x / 2);
+		this.leftOfBox = boxCol.offset.x - (boxCol.size.x / 2);
+		this.rightOfBox = boxCol.offset.x + (boxCol.size.x / 2);
 		this.originalState = this.startActive;
 		animationController.SetBool ("isOn", this.startActive);
 		activateScripts = new IActivator[activatedObjects.Length];

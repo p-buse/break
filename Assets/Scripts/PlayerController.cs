@@ -150,13 +150,13 @@ public class PlayerController : MonoBehaviour,IReset {
 		else if (theInput.getRight())
 			horizontalMovement = moveSpeed;
 		horizontalMovement *= moveSpeed;
-		rigidbody2D.velocity = new Vector2(horizontalMovement,rigidbody2D.velocity.y);
+		GetComponent<Rigidbody2D>().velocity = new Vector2(horizontalMovement,GetComponent<Rigidbody2D>().velocity.y);
 		// Process jumping
 		if (theInput.getJump() && groundCheck.IsGrounded())
-			rigidbody2D.AddForce(new Vector2(0f, jumpForce));
+			GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpForce));
 
 		// Add platform movement
-		rigidbody2D.velocity += new Vector2(groundCheck.GetMovement().x, 0f);
+		GetComponent<Rigidbody2D>().velocity += new Vector2(groundCheck.GetMovement().x, 0f);
 	}
 
 
@@ -180,15 +180,15 @@ public class PlayerController : MonoBehaviour,IReset {
 	{
 		gameObject.SetActive(true);
 		this.resetting = true;
-		this.rigidbody2D.velocity = Vector2.zero;
-        this.collider2D.enabled = false;
+		this.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        this.GetComponent<Collider2D>().enabled = false;
 		this.transform.position = Vector3.Lerp (transform.position, this.originalPosition, 1f - resetTime);
 	}
 
 	public void Reset()
 	{
-		this.rigidbody2D.velocity = Vector2.zero;
-        this.collider2D.enabled = true;
+		this.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        this.GetComponent<Collider2D>().enabled = true;
 		this.transform.position = this.originalPosition;
 		this.activatorsList = new Hashtable(); // Clear the activators list
 		this.overwriteLoop = false;

@@ -18,9 +18,9 @@ public class GroundCheck : MonoBehaviour {
 	void Awake()
 	{
 		BoxCollider2D boxCol = GetComponent<BoxCollider2D>();
-		this.bottomOfColliderY = boxCol.center.y - boxCol.size.y / 2;
-		this.leftOfColliderX = boxCol.center.x - boxCol.size.x / 2;
-		this.rightOfColliderX = boxCol.center.x + boxCol.size.x / 2;
+		this.bottomOfColliderY = boxCol.offset.y - boxCol.size.y / 2;
+		this.leftOfColliderX = boxCol.offset.x - boxCol.size.x / 2;
+		this.rightOfColliderX = boxCol.offset.x + boxCol.size.x / 2;
 
 		// Create the mask that lets us search for ground and other players below us
 		this.groundAndDefaultLayerMask = 1 << LayerMask.NameToLayer("Ground") | 
